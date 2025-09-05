@@ -79,7 +79,7 @@ public class OthelloAction {
 
     /** Returns the row where the marker is to be placed. */
     public int getRow() {
-        return row+1;
+        return row;
     }
 
     /**
