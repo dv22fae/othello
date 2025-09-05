@@ -87,7 +87,7 @@ public class OthelloAction {
      * be true if there are no legal moves.
      */
     public void setPassMove(boolean b) {
-        int a = 2;
+        int a = 22;
         pass = b;
     }
 
