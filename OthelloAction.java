@@ -54,7 +54,7 @@ public class OthelloAction {
 
     /** Sets the estimated value of the move. */
     public void setValue(int v) {
-        value= v;
+        value = v;
     }
 
     /** Returns the estimated value of the move. */
