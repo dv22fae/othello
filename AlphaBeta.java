@@ -8,6 +8,11 @@ import java.util.LinkedList;
  *
  */
 public class AlphaBeta implements OthelloAlgorithm {
+
+	private static final int NEG_INFINITY = Integer.MIN_VALUE;
+	private static final int POS_INFINITY = Integer.MAX_VALUE;
+
+
 	protected int searchDepth;
 	protected static final int DefaultDepth = 7;
 	protected OthelloEvaluator evaluator;
@@ -36,12 +41,63 @@ public class AlphaBeta implements OthelloAlgorithm {
 	}
 
 	public OthelloAction evaluate(OthelloPosition pos) {
-		// Iterativt söka ALFABETA algoritmen med olika djup. Så verkar det som vi ska göra enligt uppgiften.
-		for(int i = 1 ; i <= searchDepth; i++){
+
+		LinkedList <OthelloAction> bestMove = pos.getMoves();
+
+		if (bestMove.isEmpty()) {
+			// Movet är inte valid, alltså pass.
+			return new OthelloAction(0, 0, true);
+		}
+
+
+		// Vems tur är det?
+		boolean whitesMove = pos.toMove();
+
+		// Beta är plus oändligheten och alpha är tvärtom.
+		int alpha = NEG_INFINITY;
+		int beta  = POS_INFINITY;
+
+		OthelloAction best = null;
+		int bestValue;
+		if (whitesMove) {
+			bestValue = NEG_INFINITY;
+		} else {
+			bestValue = POS_INFINITY;
+		}
+
+		for (OthelloAction move : bestMove) {
+			// Iterativt söka ALFABETA algoritmen med olika djup. Så verkar det som vi ska göra enligt uppgiften.
+			// bla bla bla
+			OthelloPosition child = pos.clone();
+			child = child.makeMove(move);
+
+			int value = minMax(child, searchDepth, alpha, beta, !whitesMove);
+
+			if (whitesMove){
+				// gör det här träd jobbet, den större än den osv.
+				alpha = Math.max(alpha, bestValue);
+			}
+			else{
+				beta = Math.min(beta, bestValue);
+			}
+		}
+
+		if (best == null) {
+			return new OthelloAction(0, 0, true);
+		}
+
+		best.setValue(bestValue);
+		return best;
+
+
+
+
+
+		//for(int i = 1 ; i <= searchDepth; i++){
 			// Spara bästa action,
 			// Mät tid och när tiden tar slut så returnerar vi bästa action.
-			minMax(bla,bla,bla)
-		}
+			// minMax(bla,bla,bla)
+		//}
 		// TODO: implement the alpha-beta algorithm
 	}
 
@@ -59,6 +115,13 @@ public class AlphaBeta implements OthelloAlgorithm {
 		if (depth == 0) {
 			return evaluator.evaluate(pos);
 		}
+
+		LinkedList<OthelloAction> moves = pos.getMoves();
+		if (moves.isEmpty()) {
+			// Movet är inte valid.
+			return evaluator.evaluate(pos);
+		}
+
 
 		// Om det är vits tur att spela.
 		if (whitePlayer) {
