@@ -41,7 +41,7 @@ public class AlphaBeta implements OthelloAlgorithm {
 	}
 
 	public OthelloAction evaluate(OthelloPosition pos) {
-
+		// Hämta alla barn "t" i trädet till "s"
 		LinkedList <OthelloAction> bestMove = pos.getMoves();
 
 		if (bestMove.isEmpty()) {
@@ -50,14 +50,19 @@ public class AlphaBeta implements OthelloAlgorithm {
 		}
 
 
-		// Vems tur är det?
+		// Vems tur är det? Sant om vit (MAX) ska spela, falskt om svart (MIN)
 		boolean whitesMove = pos.toMove();
 
 		// Beta är plus oändligheten och alpha är tvärtom.
+		// α = -∞
 		int alpha = NEG_INFINITY;
+		// β = +∞
 		int beta  = POS_INFINITY;
 
+		// Lagrar bästa draget hittils.
 		OthelloAction best = null;
+
+		// MAX startar från -∞, MIN från +∞ (value = -∞ eller +∞).
 		int bestValue;
 		if (whitesMove) {
 			bestValue = NEG_INFINITY;
@@ -65,10 +70,15 @@ public class AlphaBeta implements OthelloAlgorithm {
 			bestValue = POS_INFINITY;
 		}
 
+		// för varje barn t av gör följande
 		for (OthelloAction move : bestMove) {
 			// Iterativt söka ALFABETA algoritmen med olika djup. Så verkar det som vi ska göra enligt uppgiften.
 			// bla bla bla
+
+			// Skapa en kopia av s.
 			OthelloPosition child = pos.clone();
+
+			// vet inte än om det ska göra här eller inte.
 			child = child.makeMove(move);
 
 			int value = minMax(child, searchDepth, alpha, beta, !whitesMove);
