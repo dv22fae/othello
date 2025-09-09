@@ -41,6 +41,9 @@ public class AlphaBeta implements OthelloAlgorithm {
 		searchDepth = depth;
 	}
 
+	/*
+
+
 	public OthelloAction evaluate(OthelloPosition pos) {
 		// Hämta alla barn "t" i trädet till "s"
 		LinkedList <OthelloAction> bestMove = pos.getMoves();
@@ -110,7 +113,7 @@ public class AlphaBeta implements OthelloAlgorithm {
 		//}
 		// TODO: implement the alpha-beta algorithm
 	}
-
+	*/
 
 	/* Algorithm:
 Man söker djupt hela vägen ner till löv. När vit spelar väljer den det drag som ger
