@@ -325,6 +325,14 @@ public class OthelloPosition {
      */
     public OthelloPosition makeMove(OthelloAction action) throws IllegalMoveException {
 
+        if (action.isPassMove())
+        {
+            OthelloPosition thisPosition = this.clone();
+            thisPosition.maxPlayer = !this.maxPlayer;
+            return thisPosition;
+        }
+
+
         /*
          * TODO: write the code for this method and whatever helper functions it needs.
          */
