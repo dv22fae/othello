@@ -1,3 +1,5 @@
+import java.awt.desktop.SystemEventListener;
+import java.util.Timer;
 
 public class Othello{
 /** 
@@ -43,6 +45,19 @@ public class Othello{
     // TODO: replace the fixed-depth implementation with Iterative Deepening Search
     // ---------------------------------------------------------------------
 	// Set the depth that AlbphaBeta will search to.
+		int searchDepth = 1;
+		long timeLimit = Integer.parseInt(args[1]);
+		long startTime = System.nanoTime();
+		while(true){
+			algorithm.setSearchDepth(searchDepth);
+			move = algorithm.evaluate(pos);
+
+			long timeTaken = startTime - System.nanoTime();
+			if(timeTaken >= timeLimit){
+				break;
+			}
+			searchDepth++;
+		}
 	algorithm.setSearchDepth(7);
 	// Evaluate the position
 	move = algorithm.evaluate(pos);
