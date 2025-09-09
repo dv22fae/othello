@@ -1,4 +1,5 @@
 import java.util.LinkedList;
+import java.util.Timer;
 
 /**
  * This is where you implement the alpha-beta algorithm.
@@ -184,10 +185,16 @@ vit och svart båda letar på samma sätt efter det mest gynnsamma drag för dem
 		}
 	}
 	*/
+	public OthelloAction evaluate(OthelloPosition pos) {
+		OthelloAction bestAction = null;
 
+		for(int i = 1; i < searchDepth; i++){
+			maxValue(pos, NEG_INFINITY, POS_INFINITY, i, bestAction);
+		}
+	}
 
 	// NY
-	private int maxValue(OthelloPosition pos, int alpha, int beta, int depth){
+	private int maxValue(OthelloPosition pos, int alpha, int beta, int depth, OthelloAction bestAction){
 		LinkedList<OthelloAction> possibleActions = pos.getMoves();
 
 		// We stop at the bottom of the tree or if no possible move is available.
@@ -219,7 +226,7 @@ vit och svart båda letar på samma sätt efter det mest gynnsamma drag för dem
 	}
 
 	// NY
-	private int minValue(OthelloPosition pos, int alpha, int beta, int depth){
+	private int minValue(OthelloPosition pos, int alpha, int beta, int depth, OthelloAction bestAction){
 		LinkedList<OthelloAction> possibleActions = pos.getMoves();
 
 		// We stop and evaluate at the bottom of the tree or if no possible move is available.
