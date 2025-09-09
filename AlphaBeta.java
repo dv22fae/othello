@@ -226,12 +226,14 @@ vit och svart båda letar på samma sätt efter det mest gynnsamma drag för dem
 
 			// Updates alfa.
 			alpha = Math.max(alpha, maxVal);
+			// bestAction = action; kanske
 
 			// If alfa is greater or equal to beta we can prune.
 			if(alpha >= beta){
 				break;
 			}
 		}
+
 		return maxVal;
 	}
 
