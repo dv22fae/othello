@@ -50,7 +50,6 @@ public class AlphaBeta implements OthelloAlgorithm {
 			return new OthelloAction(0, 0, true);
 		}
 
-
 		// Vems tur är det? Sant om vit (MAX) ska spela, falskt om svart (MIN)
 		boolean whitesMove = pos.toMove();
 
@@ -215,21 +214,25 @@ vit och svart båda letar på samma sätt efter det mest gynnsamma drag för dem
 		int maxVal = NEG_INFINITY;
 
 		// For each possible action.
-		for(OthelloAction action : possibleActions){
+		for(OthelloAction action : possibleActions) {
+			try {
+				// Makes a move on the copy so that we get an updated position (state)
+				OthelloPosition copiedPos = pos.clone();
+				copiedPos = copiedPos.makeMove(action);
 
-			// Makes a move on the copy so that we get an updated position (state)
-			OthelloPosition copiedPos = pos.clone();
-			copiedPos = copiedPos.makeMove(action);
+				// Saves the biggest value from maxVal and the result from minVal().
+				maxVal = Math.max(maxVal, minValue(copiedPos, alpha, beta, depth - 1));
 
-			// Saves the biggest value from maxVal and the result from minVal().
-			maxVal = Math.max(maxVal, minValue(copiedPos, alpha, beta, depth - 1));
+				// Updates alfa.
+				alpha = Math.max(alpha, maxVal);
 
-			// Updates alfa.
-			alpha = Math.max(alpha, maxVal);
-
-			// If alfa is greater or equal to beta we can prune.
-			if(alpha >= beta){
-				break;
+				// If alfa is greater or equal to beta we can prune.
+				if(alpha >= beta){
+					break;
+				}
+			} catch (IllegalMoveException e) {
+				// hoppar över barn.
+				e.printStackTrace();
 			}
 		}
 		return maxVal;
@@ -248,21 +251,26 @@ vit och svart båda letar på samma sätt efter det mest gynnsamma drag för dem
 
 		// For each possible action.
 		for(OthelloAction action : possibleActions){
+			try {
+				// Makes a move on the copy so that we get an updated position (state)
+				OthelloPosition copiedPos = pos.clone();
+				copiedPos = copiedPos.makeMove(action);
 
-			// Makes a move on the copy so that we get an updated position (state)
-			OthelloPosition copiedPos = pos.clone();
-			copiedPos = copiedPos.makeMove(action);
+				// Saves the smallest value from minVal and the result from maxVal().
+				minVal = Math.min(minVal, maxValue(copiedPos, alpha, beta, depth - 1));
 
-			// Saves the smallest value from minVal and the result from maxVal().
-			minVal = Math.min(minVal, maxValue(copiedPos, alpha, beta, depth - 1));
+				// Updates beta.
+				beta = Math.min(beta, minVal);
 
-			// Updates beta.
-			beta = Math.min(beta, minVal);
-
-			// If alfa is greater or equal to beta we can prune.
-			if(alpha >= beta){
-				break;
+				// If alfa is greater or equal to beta we can prune.
+				if(alpha >= beta){
+					break;
+				}
+			} catch (IllegalMoveException e) {
+				// hoppas över barn.
+				e.printStackTrace();
 			}
+
 		}
 		return minVal;
 	}
