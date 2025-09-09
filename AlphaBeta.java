@@ -203,7 +203,7 @@ vit och svart båda letar på samma sätt efter det mest gynnsamma drag för dem
 
 		// We stop at the bottom of the tree or if no possible move is available.
 		if(possibleActions.isEmpty()){
-			return new OthelloAction();
+			return new OthelloAction("pass");
 		}
 
 		// White to move.

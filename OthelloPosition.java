@@ -340,6 +340,13 @@ public class OthelloPosition {
 
         // Kolla att raden eller nu då raden och columnen som actionen ger inte är utanför board.
         checkSoInsideBoard(row, column, action);
+
+        // Klona positionen och arbeta på den så vi arbetar på den och inte originalet.
+        OthelloPosition res = this.clone();
+
+        // Vems färg?
+
+        // Loopa över de 8 riktningarna.
     }
 
     private void checkSoInsideBoard(int row, int column, OthelloAction action) throws IllegalMoveException {
