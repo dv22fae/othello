@@ -212,17 +212,20 @@ vit och svart båda letar på samma sätt efter det mest gynnsamma drag för dem
 		// White to move.
 		if(pos.toMove()){
 			int bestScore = NEG_INFINITY;
-			for (OthelloAction action : possibleActions){
+			for (OthelloAction action : possibleActions) {
+				try {
+					// Makes a move on the copy so that we get an updated position (state)
+					OthelloPosition copiedPos = pos.clone();
+					copiedPos = copiedPos.makeMove(action);
 
-				// Makes a move on the copy so that we get an updated position (state)
-				OthelloPosition copiedPos = pos.clone();
-				copiedPos = copiedPos.makeMove(action);
+					int score = minValue(copiedPos, NEG_INFINITY, POS_INFINITY, searchDepth - 1);
 
-				int score = minValue(copiedPos, NEG_INFINITY, POS_INFINITY, searchDepth - 1);
-
-				if(score > bestScore){
-					bestScore = score;
-					bestAction = action;
+					if(score > bestScore){
+						bestScore = score;
+						bestAction = action;
+					}
+				} catch (IllegalMoveException e){
+					e.printStackTrace();
 				}
 			}
 		}
@@ -230,17 +233,20 @@ vit och svart båda letar på samma sätt efter det mest gynnsamma drag för dem
 		// Black to move.
 		else{
 			int bestScore = POS_INFINITY;
-			for (OthelloAction action : possibleActions){
+			for (OthelloAction action : possibleActions) {
+				try {
+					// Makes a move on the copy so that we get an updated position (state)
+					OthelloPosition copiedPos = pos.clone();
+					copiedPos = copiedPos.makeMove(action);
 
-				// Makes a move on the copy so that we get an updated position (state)
-				OthelloPosition copiedPos = pos.clone();
-				copiedPos = copiedPos.makeMove(action);
+					int score = maxValue(copiedPos, NEG_INFINITY, POS_INFINITY, searchDepth - 1);
 
-				int score = maxValue(copiedPos, NEG_INFINITY, POS_INFINITY, searchDepth - 1);
-
-				if(score < bestScore){
-					bestScore = score;
-					bestAction = action;
+					if(score < bestScore){
+						bestScore = score;
+						bestAction = action;
+					}
+				}catch (IllegalMoveException e){
+					e.printStackTrace();
 				}
 			}
 		}
