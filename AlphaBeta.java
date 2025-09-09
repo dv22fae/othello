@@ -195,15 +195,57 @@ vit och svart båda letar på samma sätt efter det mest gynnsamma drag för dem
 	}
 	*/
 	public OthelloAction evaluate(OthelloPosition pos) {
+
 		OthelloAction bestAction = null;
-// g
-		for(int i = 1; i < searchDepth; i++){
-			maxValue(pos, NEG_INFINITY, POS_INFINITY, i, bestAction);
+
+		// Keeps track on the best action from the root (current position).
+		LinkedList<OthelloAction> possibleActions = pos.getMoves();
+
+		// We stop at the bottom of the tree or if no possible move is available.
+		if(possibleActions.isEmpty()){
+			return new OthelloAction();
 		}
+
+		// White to move.
+		if(pos.toMove()){
+			int bestScore = NEG_INFINITY;
+			for (OthelloAction action : possibleActions){
+
+				// Makes a move on the copy so that we get an updated position (state)
+				OthelloPosition copiedPos = pos.clone();
+				copiedPos = copiedPos.makeMove(action);
+
+				int score = minValue(copiedPos, NEG_INFINITY, POS_INFINITY, searchDepth - 1);
+
+				if(score > bestScore){
+					bestScore = score;
+					bestAction = action;
+				}
+			}
+		}
+
+		// Black to move.
+		else{
+			int bestScore = POS_INFINITY;
+			for (OthelloAction action : possibleActions){
+
+				// Makes a move on the copy so that we get an updated position (state)
+				OthelloPosition copiedPos = pos.clone();
+				copiedPos = copiedPos.makeMove(action);
+
+				int score = maxValue(copiedPos, NEG_INFINITY, POS_INFINITY, searchDepth - 1);
+
+				if(score < bestScore){
+					bestScore = score;
+					bestAction = action;
+				}
+			}
+		}
+		return bestAction;
 	}
 
 	// NY
-	private int maxValue(OthelloPosition pos, int alpha, int beta, int depth, OthelloAction bestAction){
+	private int maxValue(OthelloPosition pos, int alpha, int beta, int depth){
 		LinkedList<OthelloAction> possibleActions = pos.getMoves();
 
 		// We stop at the bottom of the tree or if no possible move is available.
@@ -239,7 +281,7 @@ vit och svart båda letar på samma sätt efter det mest gynnsamma drag för dem
 	}
 
 	// NY
-	private int minValue(OthelloPosition pos, int alpha, int beta, int depth, OthelloAction bestAction){
+	private int minValue(OthelloPosition pos, int alpha, int beta, int depth){
 		LinkedList<OthelloAction> possibleActions = pos.getMoves();
 
 		// We stop and evaluate at the bottom of the tree or if no possible move is available.
@@ -267,7 +309,7 @@ vit och svart båda letar på samma sätt efter det mest gynnsamma drag för dem
 					break;
 				}
 			} catch (IllegalMoveException e) {
-				// hoppas över barn.
+				// hoppar över barn.
 				e.printStackTrace();
 			}
 
