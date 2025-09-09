@@ -101,15 +101,18 @@ public class AlphaBeta implements OthelloAlgorithm {
 		// TODO: implement the alpha-beta algorithm
 	}
 
+
+	/* Algorithm:
+Man söker djupt hela vägen ner till löv. När vit spelar väljer den det drag som ger
+mest antal vita brickor (MAX). När svart spelar väljer den det drag som ger minst antal vita
+brickor (MIN). Så man har ett träd med alla drag och varannan nivå är svarts frag och varannan vits drag.
+Man sparar alltså undan antalet brickor och väljer det bästa draget och sparar vägen till den noden.
+Så att man kan skapa en OthelloAction med x och y värde osv osv. Denna algorithm är baserad på att
+vit och svart båda letar på samma sätt efter det mest gynnsamma drag för dem själva.
+ */
+	/*
 	private int minMax(OthelloPosition pos, int depth, boolean whitePlayer) {
-		/* Algorithm:
-		Man söker djupt hela vägen ner till löv. När vit spelar väljer den det drag som ger
-		mest antal vita brickor (MAX). När svart spelar väljer den det drag som ger minst antal vita
-		brickor (MIN). Så man har ett träd med alla drag och varannan nivå är svarts frag och varannan vits drag.
-		Man sparar alltså undan antalet brickor och väljer det bästa draget och sparar vägen till den noden.
-		Så att man kan skapa en OthelloAction med x och y värde osv osv. Denna algorithm är baserad på att
-		vit och svart båda letar på samma sätt efter det mest gynnsamma drag för dem själva.
-		 */
+
 
 		// Evaluera positionen längst ner i träder (löven).
 		if (depth == 0) {
@@ -180,4 +183,71 @@ public class AlphaBeta implements OthelloAlgorithm {
 			return minWhite;
 		}
 	}
+	*/
+
+
+	// NY
+	private int maxValue(OthelloPosition pos, int alpha, int beta, int depth){
+		LinkedList<OthelloAction> possibleActions = pos.getMoves();
+
+		// We stop at the bottom of the tree or if no possible move is available.
+		if(depth == 0 || possibleActions.isEmpty()){
+			return evaluator.evaluate(pos);
+		}
+
+		int maxVal = NEG_INFINITY;
+
+		// For each possible action.
+		for(OthelloAction action : possibleActions){
+
+			// Makes a move on the copy so that we get an updated position (state)
+			OthelloPosition copiedPos = pos.clone();
+			copiedPos = copiedPos.makeMove(action);
+
+			// Saves the biggest value from maxVal and the result from minVal().
+			maxVal = Math.max(maxVal, minValue(copiedPos, alpha, beta, depth - 1));
+
+			// Updates alfa.
+			alpha = Math.max(alpha, maxVal);
+
+			// If alfa is greater or equal to beta we can prune.
+			if(alpha >= beta){
+				break;
+			}
+		}
+		return maxVal;
+	}
+
+	// NY
+	private int minValue(OthelloPosition pos, int alpha, int beta, int depth){
+		LinkedList<OthelloAction> possibleActions = pos.getMoves();
+
+		// We stop and evaluate at the bottom of the tree or if no possible move is available.
+		if(depth == 0 || possibleActions.isEmpty()){
+			return evaluator.evaluate(pos);
+		}
+
+		int minVal = POS_INFINITY;
+
+		// For each possible action.
+		for(OthelloAction action : possibleActions){
+
+			// Makes a move on the copy so that we get an updated position (state)
+			OthelloPosition copiedPos = pos.clone();
+			copiedPos = copiedPos.makeMove(action);
+
+			// Saves the smallest value from minVal and the result from maxVal().
+			minVal = Math.min(minVal, maxValue(copiedPos, alpha, beta, depth - 1));
+
+			// Updates beta.
+			beta = Math.min(beta, minVal);
+
+			// If alfa is greater or equal to beta we can prune.
+			if(alpha >= beta){
+				break;
+			}
+		}
+		return minVal;
+	}
+
 }
