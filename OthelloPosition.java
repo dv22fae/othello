@@ -325,17 +325,42 @@ public class OthelloPosition {
      */
     public OthelloPosition makeMove(OthelloAction action) throws IllegalMoveException {
 
-        if (action.isPassMove())
-        {
-            OthelloPosition thisPosition = this.clone();
-            thisPosition.maxPlayer = !this.maxPlayer;
-            return thisPosition;
-        }
-
-
         /*
          * TODO: write the code for this method and whatever helper functions it needs.
          */
+
+        // Om draget är "pass", det vill säga andra färgen ska spela.
+        if (action.isPassMove()) {
+            return moveShouldBePassed();
+        }
+
+        // Hämta rad och kolumn.
+        int row = action.getRow();
+        int column = action.getColumn();
+
+        // Kolla att raden eller nu då raden och columnen som actionen ger inte är utanför board.
+        checkSoInsideBoard(row, column, action);
+    }
+
+    private void checkSoInsideBoard(int row, int column, OthelloAction action) throws IllegalMoveException {
+        if (row < 1 || row > BOARD_SIZE)
+        {
+            throw new IllegalMoveException(action);
+        }
+
+        if (column < 1 || column > BOARD_SIZE){
+            throw new IllegalMoveException(action);
+        }
+
+        if (!isFree(row, column)) {
+            throw new IllegalMoveException(action);
+        }
+    }
+
+    private OthelloPosition moveShouldBePassed() {
+            OthelloPosition thisPosition = this.clone();
+            thisPosition.maxPlayer = !this.maxPlayer;
+            return thisPosition;
     }
 
     /**
