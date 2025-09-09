@@ -363,6 +363,7 @@ public class OthelloPosition {
 
         //isMove()
 
+        // bara för att slippa varning nu.
         return new OthelloPosition();
     }
 
