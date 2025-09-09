@@ -197,7 +197,7 @@ vit och svart båda letar på samma sätt efter det mest gynnsamma drag för dem
 	*/
 	public OthelloAction evaluate(OthelloPosition pos) {
 		OthelloAction bestAction = null;
-
+// g
 		for(int i = 1; i < searchDepth; i++){
 			maxValue(pos, NEG_INFINITY, POS_INFINITY, i, bestAction);
 		}
