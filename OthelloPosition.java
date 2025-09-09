@@ -338,15 +338,32 @@ public class OthelloPosition {
         int row = action.getRow();
         int column = action.getColumn();
 
+        // någon plupp bytt färg?
+        boolean anyoneFlipped = false;
+
         // Kolla att raden eller nu då raden och columnen som actionen ger inte är utanför board.
         checkSoInsideBoard(row, column, action);
 
         // Klona positionen och arbeta på den så vi arbetar på den och inte originalet.
-        OthelloPosition res = this.clone();
+        OthelloPosition currentPosCloned = this.clone();
 
-        // Vems färg?
+        // Vem/vilken färg är det som ska göra sitt drag?
+        char currentPlayer, opponent;
+        boolean whitesMove = this.maxPlayer;
+
+        if (whitesMove == true) {
+            currentPlayer  = 'W';
+            opponent = 'B';
+        } else {
+            currentPlayer  = 'B';
+            opponent = 'W';
+        }
 
         // Loopa över de 8 riktningarna.
+
+        //isMove()
+
+        return new OthelloPosition();
     }
 
     private void checkSoInsideBoard(int row, int column, OthelloAction action) throws IllegalMoveException {
