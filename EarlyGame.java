@@ -3,20 +3,25 @@ public class EarlyGame implements OthelloEvaluator{
     @Override
     public int evaluate(OthelloPosition pos) {
         OthelloPosition position = (OthelloPosition) pos;
+
+        return evaluateNumWhiteBricks(position) + evaluateCorners(position) + evaluateCornerNeighbours(position) +evaluateMiddleControlFirstLayer(position) + evaluateGoodEdgeSquares(position) + evaluateMiddleControlSecondLayer(position);
+    }
+
+    public int evaluateNumWhiteBricks(OthelloPosition pos) {
         int blackSquares = 0;
         int whiteSquares = 0;
-        int numSquaresWeight = 10;
+        int numWhiteSquaresWeight = 10;
 
         for (int i = 1; i <= OthelloPosition.BOARD_SIZE; i++) {
             for (int j = 1; j <= OthelloPosition.BOARD_SIZE; j++) {
-                if (position.board[i][j] == 'W')
+                if (pos.board[i][j] == 'W')
                     whiteSquares++;
-                if (position.board[i][j] == 'B')
+                if (pos.board[i][j] == 'B')
                     blackSquares++;
             }
         }
 
-        return (numSquaresWeight * (whiteSquares - blackSquares)) + evaluateMiddleControl(position);
+        return numWhiteSquaresWeight * (whiteSquares - blackSquares);
     }
 
     private int evaluateMiddleControlFirstLayer(OthelloPosition pos){
@@ -30,23 +35,7 @@ public class EarlyGame implements OthelloEvaluator{
                 }
             }
         }
-/*
-        if(pos.board[4][4] == 'W'){
-            numMiddleSquares++;
-        }
 
-        if(pos.board[5][4] == 'W'){
-            numMiddleSquares++;
-        }
-
-        if(pos.board[4][5] == 'W'){
-            numMiddleSquares++;
-        }
-
-        if(pos.board[5][5] == 'W'){
-            numMiddleSquares++;
-        }
-*/
         return numMiddleSquares * controlMiddleWeight;
     }
 
@@ -137,16 +126,43 @@ public class EarlyGame implements OthelloEvaluator{
         return numCorners * numCornersWeight;
     }
 
-    // inte klar.
+    // Bra kantrutor man vill ha så länge man har det hörnet, annars kommer motståndaren kunna få dem.
     private int evaluateGoodEdgeSquares(OthelloPosition pos){
         int numGoodEdgeSquares = 0;
         int numGoodEdgeSquaresWeight = 30;
 
+        if(pos.board[1][1] == 'W'){
+            for(int i = 2; i < 8; i++){
+                if(pos.board[1][i] == 'W'){
+                    numGoodEdgeSquares++;
+                }
+            }
+        }
+
+        if(pos.board[1][8] == 'W'){
+            for(int i = 2; i < 8; i++){
+                if(pos.board[i][8] == 'W'){
+                    numGoodEdgeSquares++;
+                }
+            }
+        }
+
+        if(pos.board[8][8] == 'W'){
+            for(int i = 2; i < 8; i++){
+                if(pos.board[8][i] == 'W'){
+                    numGoodEdgeSquares++;
+                }
+            }
+        }
+
+        if(pos.board[8][8] == 'W'){
+            for(int i = 2; i < 8; i++){
+                if(pos.board[i][1] == 'W'){
+                    numGoodEdgeSquares++;
+                }
+            }
+        }
+
         return numGoodEdgeSquares * numGoodEdgeSquaresWeight;
     }
-
-
-
-
-
 }
