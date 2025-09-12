@@ -323,13 +323,14 @@ public class OthelloPosition {
      * Returns the position resulting from making the move <code>action</code> in
      * the current position. Observe that this also changes the player to move next.
      */
-    public OthelloPosition makeMove(OthelloAction action) throws IllegalMoveException {
+
+    //public OthelloPosition makeMove(OthelloAction action) throws IllegalMoveException {
 
         /*
          * TODO: write the code for this method and whatever helper functions it needs.
          */
 
-        // Om draget är "pass", det vill säga andra färgen ska spela.
+        /*// Om draget är "pass", det vill säga andra färgen ska spela.
         if (action.isPassMove()) {
             return moveShouldBePassed();
         }
@@ -365,6 +366,249 @@ public class OthelloPosition {
 
         // bara för att slippa varning nu.
         return new OthelloPosition();
+    }
+*/
+
+    /**
+     * Returns the position resulting from making the move <code>action</code> in
+     * the current position. Observe that this also changes the player to move next.
+     */
+    public OthelloPosition makeMove(OthelloAction action) throws IllegalMoveException {
+
+        /*
+         * TODO: write the code for this method and whatever helper functions it needs.
+         */
+
+
+        // Om draget är "pass", det vill säga andra färgen ska spela.
+        if (action.isPassMove()) {
+            return moveShouldBePassed();
+        }
+
+        // Hämta rad och kolumn.
+        int row = action.getRow();
+        int column = action.getColumn();
+
+        if(!isMove(row, column)){
+            return moveShouldBePassed();
+        }
+
+        // Klona positionen och arbeta på den så vi arbetar på den och inte originalet.
+        OthelloPosition currentPosCloned = this.clone();
+
+        boolean whitesMove = this.maxPlayer;
+        if(whitesMove) {
+            if (checkNorth(row, column)) {
+                for (int i = row - 2; i > 0; i--) {
+                    if (isFree(i, column)) {
+                        break;
+                    }
+                    if (isOwnSquare(i, column)) {
+                        break;
+                    }
+                    currentPosCloned.board[i][column] = 'W';
+                }
+
+            }
+
+
+            if (checkNorthEast(row, column)) {
+                for (int i = 2; row - i > 0 && column + i <= BOARD_SIZE; i++) {
+                    if (isFree(row - i, column + i)) {
+                        break;
+                    }
+                    if (isOwnSquare(row - i, column + i)) {
+                        break;
+                    }
+                    currentPosCloned.board[row - i][column + 1] = 'W';
+                }
+            }
+
+
+            if (checkEast(row, column)) {
+                for (int i = column + 2; i <= BOARD_SIZE; i++) {
+                    if (isFree(row, i)) {
+                        break;
+                    }
+                    if (isOwnSquare(row, i)) {
+                        break;
+                    }
+                    currentPosCloned.board[row][i] = 'W';
+                }
+            }
+
+
+            if (checkSouthEast(row, column)) {
+                for (int i = 2; row + i <= BOARD_SIZE && column + i <= BOARD_SIZE; i++) {
+                    if (isFree(row + i, column + i)) {
+                        break;
+                    }
+                    if (isOwnSquare(row + i, column + i)) {
+                        break;
+                    }
+                    currentPosCloned.board[row + i][column + i] = 'W';
+                }
+            }
+
+
+            if (checkSouth(row, column)) {
+                for (int i = row + 2; i <= BOARD_SIZE; i++) {
+                    if (isFree(i, column)) {
+                        break;
+                    }
+                    if (isOwnSquare(i, column)) {
+                        break;
+                    }
+                    currentPosCloned.board[i][column] = 'W';
+                }
+            }
+
+
+            if (checkSouthWest(row, column)) {
+                for (int i = 2; row + i <= BOARD_SIZE && column - i > 0; i++) {
+                    if (isFree(row + i, column - i)) {
+                        break;
+                    }
+                    if (isOwnSquare(row + i, column - i)) {
+                        break;
+                    }
+                    currentPosCloned.board[row + 1][column + i] = 'W';
+                }
+            }
+
+
+            if (checkWest(row, column)) {
+                for (int i = column - 2; i > 0; i--) {
+                    if (isFree(row, i)) {
+                        break;
+                    }
+                    if (isOwnSquare(row, i)) {
+                        break;
+                    }
+                    currentPosCloned.board[row][i] = 'W';
+                }
+            }
+
+
+            if (checkNorthEast(row, column)) {
+                for (int i = 2; row - i > 0 && column + i <= BOARD_SIZE; i++) {
+                    if (isFree(row - i, column + i)) {
+                        break;
+                    }
+                    if (isOwnSquare(row - i, column + i)) {
+                        break;
+                    }
+                    currentPosCloned.board[row - i][column + i] = 'W';
+                }
+            }
+        }
+        // black
+        else{
+            if (checkNorth(row, column)) {
+                for (int i = row - 2; i > 0; i--) {
+                    if (isFree(i, column)) {
+                        break;
+                    }
+                    if (isOwnSquare(i, column)) {
+                        break;
+                    }
+                    currentPosCloned.board[i][column] = 'B';
+                }
+
+            }
+
+
+            if (checkNorthEast(row, column)) {
+                for (int i = 2; row - i > 0 && column + i <= BOARD_SIZE; i++) {
+                    if (isFree(row - i, column + i)) {
+                        break;
+                    }
+                    if (isOwnSquare(row - i, column + i)) {
+                        break;
+                    }
+                    currentPosCloned.board[row - i][column + 1] = 'B';
+                }
+            }
+
+
+            if (checkEast(row, column)) {
+                for (int i = column + 2; i <= BOARD_SIZE; i++) {
+                    if (isFree(row, i)) {
+                        break;
+                    }
+                    if (isOwnSquare(row, i)) {
+                        break;
+                    }
+                    currentPosCloned.board[row][i] = 'B';
+                }
+            }
+
+
+            if (checkSouthEast(row, column)) {
+                for (int i = 2; row + i <= BOARD_SIZE && column + i <= BOARD_SIZE; i++) {
+                    if (isFree(row + i, column + i)) {
+                        break;
+                    }
+                    if (isOwnSquare(row + i, column + i)) {
+                        break;
+                    }
+                    currentPosCloned.board[row + i][column + i] = 'B';
+                }
+            }
+
+
+            if (checkSouth(row, column)) {
+                for (int i = row + 2; i <= BOARD_SIZE; i++) {
+                    if (isFree(i, column)) {
+                        break;
+                    }
+                    if (isOwnSquare(i, column)) {
+                        break;
+                    }
+                    currentPosCloned.board[i][column] = 'B';
+                }
+            }
+
+
+            if (checkSouthWest(row, column)) {
+                for (int i = 2; row + i <= BOARD_SIZE && column - i > 0; i++) {
+                    if (isFree(row + i, column - i)) {
+                        break;
+                    }
+                    if (isOwnSquare(row + i, column - i)) {
+                        break;
+                    }
+                    currentPosCloned.board[row + 1][column + i] = 'B';
+                }
+            }
+
+
+            if (checkWest(row, column)) {
+                for (int i = column - 2; i > 0; i--) {
+                    if (isFree(row, i)) {
+                        break;
+                    }
+                    if (isOwnSquare(row, i)) {
+                        break;
+                    }
+                    currentPosCloned.board[row][i] = 'W';
+                }
+            }
+
+
+            if (checkNorthEast(row, column)) {
+                for (int i = 2; row - i > 0 && column + i <= BOARD_SIZE; i++) {
+                    if (isFree(row - i, column + i)) {
+                        break;
+                    }
+                    if (isOwnSquare(row - i, column + i)) {
+                        break;
+                    }
+                    currentPosCloned.board[row - i][column + i] = 'B';
+                }
+            }
+        }
+        return currentPosCloned;
     }
 
     private void checkSoInsideBoard(int row, int column, OthelloAction action) throws IllegalMoveException {

@@ -46,21 +46,21 @@ public class Othello{
     // ---------------------------------------------------------------------
 	// Set the depth that AlbphaBeta will search to.
 		int searchDepth = 1;
-		long timeLimit = Integer.parseInt(args[1]);
+		long timeLimit = Long.parseLong(args[1]);
 		long startTime = System.nanoTime();
 		while(true){
 			algorithm.setSearchDepth(searchDepth);
 			move = algorithm.evaluate(pos);
 
-			long timeTaken = startTime - System.nanoTime();
+			long timeTaken = System.nanoTime() - startTime;
 			if(timeTaken >= timeLimit){
 				break;
 			}
 			searchDepth++;
 		}
-	algorithm.setSearchDepth(7);
+	//algorithm.setSearchDepth(7);
 	// Evaluate the position
-	move = algorithm.evaluate(pos);
+	//move = algorithm.evaluate(pos);
 	// Send the chosen move to stdout (print it)
 	move.print();
     }
