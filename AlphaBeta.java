@@ -204,6 +204,10 @@ vit och svart båda letar på samma sätt efter det mest gynnsamma drag för dem
 		// Keeps track on the best action from the root (current position).
 		LinkedList<OthelloAction> possibleActions = pos.getMoves();
 
+		for(OthelloAction a : possibleActions){
+			System.out.println(a.row + "	 " + a.column);
+		}
+
 		// We stop at the bottom of the tree or if no possible move is available.
 		if(possibleActions.isEmpty()){
 			return new OthelloAction("pass");
@@ -215,10 +219,11 @@ vit och svart båda letar på samma sätt efter det mest gynnsamma drag för dem
 			for (OthelloAction action : possibleActions) {
 				try {
 					// Makes a move on the copy so that we get an updated position (state)
-					OthelloPosition copiedPos = pos.clone();
-					copiedPos = copiedPos.makeMove(action);
+					//OthelloPosition copiedPos = pos.clone();
+					//copiedPos = copiedPos.makeMove(action);
+					OthelloPosition newPos = pos.makeMove(action);
 
-					int score = minValue(copiedPos, NEG_INFINITY, POS_INFINITY, searchDepth - 1);
+					int score = minValue(newPos, NEG_INFINITY, POS_INFINITY, searchDepth - 1);
 
 					if(score > bestScore){
 						bestScore = score;
@@ -236,10 +241,11 @@ vit och svart båda letar på samma sätt efter det mest gynnsamma drag för dem
 			for (OthelloAction action : possibleActions) {
 				try {
 					// Makes a move on the copy so that we get an updated position (state)
-					OthelloPosition copiedPos = pos.clone();
-					copiedPos = copiedPos.makeMove(action);
+					//OthelloPosition copiedPos = pos.clone();
+					//copiedPos = copiedPos.makeMove(action);
+					OthelloPosition newPos = pos.makeMove(action);
 
-					int score = maxValue(copiedPos, NEG_INFINITY, POS_INFINITY, searchDepth - 1);
+					int score = maxValue(newPos, NEG_INFINITY, POS_INFINITY, searchDepth - 1);
 
 					if(score < bestScore){
 						bestScore = score;
@@ -268,11 +274,12 @@ vit och svart båda letar på samma sätt efter det mest gynnsamma drag för dem
 		for(OthelloAction action : possibleActions) {
 			try {
 				// Makes a move on the copy so that we get an updated position (state)
-				OthelloPosition copiedPos = pos.clone();
-				copiedPos = copiedPos.makeMove(action);
+				//OthelloPosition copiedPos = pos.clone();
+				//copiedPos = copiedPos.makeMove(action);
+				OthelloPosition newPos = pos.makeMove(action);
 
 				// Saves the biggest value from maxVal and the result from minVal().
-				maxVal = Math.max(maxVal, minValue(copiedPos, alpha, beta, depth - 1));
+				maxVal = Math.max(maxVal, minValue(newPos, alpha, beta, depth - 1));
 
 				// Updates alfa.
 				alpha = Math.max(alpha, maxVal);
@@ -304,11 +311,12 @@ vit och svart båda letar på samma sätt efter det mest gynnsamma drag för dem
 		for(OthelloAction action : possibleActions){
 			try {
 				// Makes a move on the copy so that we get an updated position (state)
-				OthelloPosition copiedPos = pos.clone();
-				copiedPos = copiedPos.makeMove(action);
+				//OthelloPosition copiedPos = pos.clone();
+				//copiedPos = copiedPos.makeMove(action);
+				OthelloPosition newPos = pos.makeMove(action);
 
 				// Saves the smallest value from minVal and the result from maxVal().
-				minVal = Math.min(minVal, maxValue(copiedPos, alpha, beta, depth - 1));
+				minVal = Math.min(minVal, maxValue(newPos, alpha, beta, depth - 1));
 
 				// Updates beta.
 				beta = Math.min(beta, minVal);
