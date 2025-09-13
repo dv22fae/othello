@@ -1,5 +1,4 @@
 public class EarlyGame implements OthelloEvaluator{
-
     @Override
     public int evaluate(OthelloPosition pos) {
         OthelloPosition position = (OthelloPosition) pos;
