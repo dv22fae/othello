@@ -1,6 +1,8 @@
 import java.awt.desktop.SystemEventListener;
 import java.util.Timer;
 
+
+
 public class Othello{
 /** 
  * Main entry point for the Othello game search.
@@ -23,6 +25,9 @@ public class Othello{
  *
  * Author: Henrik Björklund 
  */
+
+	private static final long NANO_PER_SECOND = 1_000_000_000L;
+
     public static void main(String [] args){
 
 	String posString;
@@ -45,17 +50,24 @@ public class Othello{
     // TODO: replace the fixed-depth implementation with Iterative Deepening Search
     // ---------------------------------------------------------------------
 	// Set the depth that AlbphaBeta will search to.
-		int searchDepth = 1;
-		long timeLimit = Long.parseLong(args[1]);
+		double timeLimitSeconds;
+		if(args.length > 1){
+			timeLimitSeconds = Double.parseDouble(args[1]);
+		}else{
+			timeLimitSeconds = 5.0;
+		}
+
+		long timeLimit = (long)(timeLimitSeconds * NANO_PER_SECOND);
 		long startTime = System.nanoTime();
-		while(true){
+		long deadline = startTime + timeLimit;
+
+		int searchDepth = 1;
+		move = new OthelloAction("pass");
+
+		while(System.nanoTime() < deadline){
 			algorithm.setSearchDepth(searchDepth);
 			move = algorithm.evaluate(pos);
 
-			long timeTaken = System.nanoTime() - startTime;
-			if(timeTaken >= timeLimit){
-				break;
-			}
 			searchDepth++;
 		}
 	//algorithm.setSearchDepth(7);
