@@ -578,7 +578,7 @@ public class OthelloPosition {
                     if (isOwnSquare(row + i, column - i)) {
                         break;
                     }
-                    currentPosCloned.board[row + 1][column + i] = 'B';
+                    currentPosCloned.board[row + 1][column - i] = 'B';
                 }
             }
 
