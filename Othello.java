@@ -53,10 +53,8 @@ public class Othello{
 			if(timeTaken >= timeLimit){
 				break;
 			}
-			System.out.println(searchDepth);
 			algorithm.setSearchDepth(searchDepth);
 			move = algorithm.evaluate(pos);
-
 
 			searchDepth++;
 		}
