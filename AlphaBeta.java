@@ -3,7 +3,7 @@ import java.util.Timer;
 
 /**
  * This is where you implement the alpha-beta algorithm.
- * See <code>OthelloAlgorithm</code> for details
+ * See <code>OthelloAlgorithm</code> for detailss
  *
  * @author Henrik Bj&ouml;rklund
  *
