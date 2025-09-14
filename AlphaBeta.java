@@ -13,7 +13,6 @@ public class AlphaBeta implements OthelloAlgorithm {
 	private static final int NEG_INFINITY = Integer.MIN_VALUE;
 	private static final int POS_INFINITY = Integer.MAX_VALUE;
 
-
 	protected int searchDepth;
 	protected static final int DefaultDepth = 7;
 	protected OthelloEvaluator evaluator;
@@ -43,7 +42,6 @@ public class AlphaBeta implements OthelloAlgorithm {
 
 
 	public OthelloAction evaluate(OthelloPosition pos) {
-
 		OthelloAction bestAction = null;
 
 		// Keeps track on the best action from the root (current position).
@@ -162,5 +160,4 @@ public class AlphaBeta implements OthelloAlgorithm {
 		}
 		return minVal;
 	}
-
 }

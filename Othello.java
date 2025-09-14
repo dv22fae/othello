@@ -40,11 +40,9 @@ public class Othello{
 		//pos.illustrate(); //Only for debugging. The test script has it's own print method
 
 		// Which evaluator (heuristics) should be used
-		algorithm = new AlphaBeta(new CountingEvaluator());
-		// ---------------------------------------------------------------------
-		// TODO: replace the fixed-depth implementation with Iterative Deepening Search
-		// ---------------------------------------------------------------------
-		// Set the depth that AlbphaBeta will search to.
+		algorithm = new AlphaBeta(new EarlyGame());
+
+		// Iterative depth search with time limit.
 		int searchDepth = 1;
 		long timeLimit = Long.parseLong(args[1]) * 1_000_000;
 		long startTime = System.nanoTime();
@@ -58,10 +56,7 @@ public class Othello{
 
 			searchDepth++;
 		}
-		//algorithm.setSearchDepth(7);
-		// Evaluate the position
-		//move = algorithm.evaluate(pos);
-		// Send the chosen move to stdout (print it)
+
 		move.print();
 	}
 }

@@ -1,15 +1,22 @@
 public class EarlyGame implements OthelloEvaluator{
+
+    private static final int NUM_WHITE_SQUARES_WEIGHT = 10;
+    private static final int CONTROL_MIDDLE_WEIGHT = 25;
+    private static final int NUM_CORNER_NEIGHBOURS_WEIGHT = -20;
+    private static final int NUM_CORNERS_WEIGHT = 50;
+    private static final int NUM_GOOD_EDGE_SQUARES_WEIGHT = 30;
+
+    // Ska den endast evaluera white 'W' till positiv, eller svart med eftersom man spelar som svart i script?
     @Override
     public int evaluate(OthelloPosition pos) {
         OthelloPosition position = (OthelloPosition) pos;
 
-        return evaluateNumWhiteBricks(position) + evaluateCorners(position) + evaluateCornerNeighbours(position) +evaluateMiddleControlFirstLayer(position) + evaluateGoodEdgeSquares(position) + evaluateMiddleControlSecondLayer(position);
+        return evaluateNumWhiteBricks(position) + evaluateCorners(position) + evaluateCornerNeighbours(position) +evaluateMiddleControlFirstLayer(position) + evaluateGoodEdgeSquares(position);
     }
 
     public int evaluateNumWhiteBricks(OthelloPosition pos) {
         int blackSquares = 0;
         int whiteSquares = 0;
-        int numWhiteSquaresWeight = 10;
 
         for (int i = 1; i <= OthelloPosition.BOARD_SIZE; i++) {
             for (int j = 1; j <= OthelloPosition.BOARD_SIZE; j++) {
@@ -20,11 +27,10 @@ public class EarlyGame implements OthelloEvaluator{
             }
         }
 
-        return numWhiteSquaresWeight * (whiteSquares - blackSquares);
+        return NUM_WHITE_SQUARES_WEIGHT * (whiteSquares - blackSquares);
     }
 
     private int evaluateMiddleControlFirstLayer(OthelloPosition pos){
-        int controlMiddleWeight = 20;
         int numMiddleSquares = 0;
 
         for(int i = 4; i < 6; i++){
@@ -35,12 +41,12 @@ public class EarlyGame implements OthelloEvaluator{
             }
         }
 
-        return numMiddleSquares * controlMiddleWeight;
+        return numMiddleSquares * CONTROL_MIDDLE_WEIGHT;
     }
 
     // Rutor som man vill ha.
+    /*
     private int evaluateMiddleControlSecondLayer(OthelloPosition pos){
-        int controlMiddleWeight = 20;
         int numMiddleSquares = 0;
 
         for(int i = 3; i < 7; i++){
@@ -51,15 +57,14 @@ public class EarlyGame implements OthelloEvaluator{
             }
         }
 
-        return numMiddleSquares * controlMiddleWeight;
+        return numMiddleSquares * CONTROL_MIDDLE_WEIGHT;
     }
-
+*/
 
     // Position to avoid because they allow opponent to grab a corner.
     // Också lägga till den tredje? alltså pos.board[2][2]?
     private int evaluateCornerNeighbours(OthelloPosition pos){
         int numCornerNeighbours = 0;
-        int numCornerNeighboursWeight = -30;
 
         if(pos.board[1][1] != 'W'){
             if(pos.board[2][1] == 'W'){
@@ -97,14 +102,13 @@ public class EarlyGame implements OthelloEvaluator{
             }
         }
 
-        return numCornerNeighbours * numCornerNeighboursWeight;
+        return numCornerNeighbours * NUM_CORNER_NEIGHBOURS_WEIGHT;
     }
 
 
     // Man vill verkligen ha hörnen.
     private int evaluateCorners(OthelloPosition pos){
         int numCorners = 0;
-        int numCornersWeight = 50;
 
         if(pos.board[1][1] == 'W'){
             numCorners++;
@@ -122,13 +126,12 @@ public class EarlyGame implements OthelloEvaluator{
             numCorners++;
         }
 
-        return numCorners * numCornersWeight;
+        return numCorners * NUM_CORNERS_WEIGHT;
     }
 
     // Bra kantrutor man vill ha så länge man har det hörnet, annars kommer motståndaren kunna få dem.
     private int evaluateGoodEdgeSquares(OthelloPosition pos){
         int numGoodEdgeSquares = 0;
-        int numGoodEdgeSquaresWeight = 30;
 
         if(pos.board[1][1] == 'W'){
             for(int i = 2; i < 8; i++){
@@ -162,6 +165,6 @@ public class EarlyGame implements OthelloEvaluator{
             }
         }
 
-        return numGoodEdgeSquares * numGoodEdgeSquaresWeight;
+        return numGoodEdgeSquares * NUM_GOOD_EDGE_SQUARES_WEIGHT;
     }
 }

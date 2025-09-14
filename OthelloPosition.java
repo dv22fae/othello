@@ -317,299 +317,241 @@ public class OthelloPosition {
         return maxPlayer;
     }
 
-    /* makeMove and helper functions */
 
     /**
      * Returns the position resulting from making the move <code>action</code> in
      * the current position. Observe that this also changes the player to move next.
      */
-
-    //public OthelloPosition makeMove(OthelloAction action) throws IllegalMoveException {
-
-        /*
-         * TODO: write the code for this method and whatever helper functions it needs.
-         */
-
-        /*// Om draget är "pass", det vill säga andra färgen ska spela.
-        if (action.isPassMove()) {
-            return moveShouldBePassed();
-        }
-
-        // Hämta rad och kolumn.
-        int row = action.getRow();
-        int column = action.getColumn();
-
-        // någon plupp bytt färg?
-        boolean anyoneFlipped = false;
-
-        // Kolla att raden eller nu då raden och columnen som actionen ger inte är utanför board.
-        checkSoInsideBoard(row, column, action);
-
-        // Klona positionen och arbeta på den så vi arbetar på den och inte originalet.
-        OthelloPosition currentPosCloned = this.clone();
-
-        // Vem/vilken färg är det som ska göra sitt drag?
-        char currentPlayer, opponent;
-        boolean whitesMove = this.maxPlayer;
-
-        if (whitesMove == true) {
-            currentPlayer  = 'W';
-            opponent = 'B';
-        } else {
-            currentPlayer  = 'B';
-            opponent = 'W';
-        }
-
-        // Loopa över de 8 riktningarna.
-
-        //isMove()
-
-        // bara för att slippa varning nu.
-        return new OthelloPosition();
-    }
-*/
-
-    /**
-     * Returns the position resulting from making the move <code>action</code> in
-     * the current position. Observe that this also changes the player to move next.
-     */
+    // Ändras player till andra spelaren efter ett move?
     public OthelloPosition makeMove(OthelloAction action) throws IllegalMoveException {
-
-        /*
-         * TODO: write the code for this method and whatever helper functions it needs.
-         */
-
-
-        // Om draget är "pass", det vill säga andra färgen ska spela.
+        // If the action is a pass action.
         if (action.isPassMove()) {
             return moveShouldBePassed();
         }
 
-        // Hämta rad och kolumn.
+        // Get the row and column from the placed brick.
         int row = action.getRow();
         int column = action.getColumn();
 
+        // Checks if there is any bricks that can be flipped with this move.
         if(!isMove(row, column)){
             return moveShouldBePassed();
         }
 
-        // Klona positionen och arbeta på den så vi arbetar på den och inte originalet.
+        // Makes a copy of the current position on the board, we will not modify the original position.
         OthelloPosition currentPosCloned = this.clone();
 
         boolean whitesMove = this.maxPlayer;
+
+        // Flips the black bricks to white according to the placed white brick.
         if(whitesMove) {
-            if (checkNorth(row, column)) {
-                for (int i = row - 2; i > 0; i--) {
-                    if (isFree(i, column)) {
-                        break;
-                    }
-                    if (isOwnSquare(i, column)) {
-                        break;
-                    }
-                    currentPosCloned.board[i][column] = 'W';
-                }
-
-            }
-
-
-            if (checkNorthEast(row, column)) {
-                for (int i = 2; row - i > 0 && column + i <= BOARD_SIZE; i++) {
-                    if (isFree(row - i, column + i)) {
-                        break;
-                    }
-                    if (isOwnSquare(row - i, column + i)) {
-                        break;
-                    }
-                    currentPosCloned.board[row - i][column + 1] = 'W';
-                }
-            }
-
-
-            if (checkEast(row, column)) {
-                for (int i = column + 2; i <= BOARD_SIZE; i++) {
-                    if (isFree(row, i)) {
-                        break;
-                    }
-                    if (isOwnSquare(row, i)) {
-                        break;
-                    }
-                    currentPosCloned.board[row][i] = 'W';
-                }
-            }
-
-
-            if (checkSouthEast(row, column)) {
-                for (int i = 2; row + i <= BOARD_SIZE && column + i <= BOARD_SIZE; i++) {
-                    if (isFree(row + i, column + i)) {
-                        break;
-                    }
-                    if (isOwnSquare(row + i, column + i)) {
-                        break;
-                    }
-                    currentPosCloned.board[row + i][column + i] = 'W';
-                }
-            }
-
-
-            if (checkSouth(row, column)) {
-                for (int i = row + 2; i <= BOARD_SIZE; i++) {
-                    if (isFree(i, column)) {
-                        break;
-                    }
-                    if (isOwnSquare(i, column)) {
-                        break;
-                    }
-                    currentPosCloned.board[i][column] = 'W';
-                }
-            }
-
-
-            if (checkSouthWest(row, column)) {
-                for (int i = 2; row + i <= BOARD_SIZE && column - i > 0; i++) {
-                    if (isFree(row + i, column - i)) {
-                        break;
-                    }
-                    if (isOwnSquare(row + i, column - i)) {
-                        break;
-                    }
-                    currentPosCloned.board[row + 1][column - i] = 'W';
-                }
-            }
-
-
-            if (checkWest(row, column)) {
-                for (int i = column - 2; i > 0; i--) {
-                    if (isFree(row, i)) {
-                        break;
-                    }
-                    if (isOwnSquare(row, i)) {
-                        break;
-                    }
-                    currentPosCloned.board[row][i] = 'W';
-                }
-            }
-
-
-            if (checkNorthEast(row, column)) {
-                for (int i = 2; row - i > 0 && column + i <= BOARD_SIZE; i++) {
-                    if (isFree(row - i, column + i)) {
-                        break;
-                    }
-                    if (isOwnSquare(row - i, column + i)) {
-                        break;
-                    }
-                    currentPosCloned.board[row - i][column + i] = 'W';
-                }
-            }
+            northTurnBricks(row, column, currentPosCloned, 'W');
+            northEastTurnBricks(row, column, currentPosCloned, 'W');
+            eastTurnBricks(row, column, currentPosCloned, 'W');
+            southEastTurnBricks(row, column, currentPosCloned, 'W');
+            southTurnBricks(row, column, currentPosCloned, 'W');
+            southWestTurnBricks(row, column, currentPosCloned, 'W');
+            westTurnBricks(row, column, currentPosCloned, 'W');
+            northWestTurnBricks(row, column, currentPosCloned, 'W');
         }
-        // black
+
+        // Flips the white bricks to black according to the placed black brick.
         else{
-            if (checkNorth(row, column)) {
-                for (int i = row - 2; i > 0; i--) {
-                    if (isFree(i, column)) {
-                        break;
-                    }
-                    if (isOwnSquare(i, column)) {
-                        break;
-                    }
-                    currentPosCloned.board[i][column] = 'B';
-                }
-
-            }
-
-
-            if (checkNorthEast(row, column)) {
-                for (int i = 2; row - i > 0 && column + i <= BOARD_SIZE; i++) {
-                    if (isFree(row - i, column + i)) {
-                        break;
-                    }
-                    if (isOwnSquare(row - i, column + i)) {
-                        break;
-                    }
-                    currentPosCloned.board[row - i][column + 1] = 'B';
-                }
-            }
-
-
-            if (checkEast(row, column)) {
-                for (int i = column + 2; i <= BOARD_SIZE; i++) {
-                    if (isFree(row, i)) {
-                        break;
-                    }
-                    if (isOwnSquare(row, i)) {
-                        break;
-                    }
-                    currentPosCloned.board[row][i] = 'B';
-                }
-            }
-
-
-            if (checkSouthEast(row, column)) {
-                for (int i = 2; row + i <= BOARD_SIZE && column + i <= BOARD_SIZE; i++) {
-                    if (isFree(row + i, column + i)) {
-                        break;
-                    }
-                    if (isOwnSquare(row + i, column + i)) {
-                        break;
-                    }
-                    currentPosCloned.board[row + i][column + i] = 'B';
-                }
-            }
-
-
-            if (checkSouth(row, column)) {
-                for (int i = row + 2; i <= BOARD_SIZE; i++) {
-                    if (isFree(i, column)) {
-                        break;
-                    }
-                    if (isOwnSquare(i, column)) {
-                        break;
-                    }
-                    currentPosCloned.board[i][column] = 'B';
-                }
-            }
-
-
-            if (checkSouthWest(row, column)) {
-                for (int i = 2; row + i <= BOARD_SIZE && column - i > 0; i++) {
-                    if (isFree(row + i, column - i)) {
-                        break;
-                    }
-                    if (isOwnSquare(row + i, column - i)) {
-                        break;
-                    }
-                    currentPosCloned.board[row + 1][column - i] = 'B';
-                }
-            }
-
-
-            if (checkWest(row, column)) {
-                for (int i = column - 2; i > 0; i--) {
-                    if (isFree(row, i)) {
-                        break;
-                    }
-                    if (isOwnSquare(row, i)) {
-                        break;
-                    }
-                    currentPosCloned.board[row][i] = 'W';
-                }
-            }
-
-
-            if (checkNorthEast(row, column)) {
-                for (int i = 2; row - i > 0 && column + i <= BOARD_SIZE; i++) {
-                    if (isFree(row - i, column + i)) {
-                        break;
-                    }
-                    if (isOwnSquare(row - i, column + i)) {
-                        break;
-                    }
-                    currentPosCloned.board[row - i][column + i] = 'B';
-                }
-            }
+            northTurnBricks(row, column, currentPosCloned, 'B');
+            northEastTurnBricks(row, column, currentPosCloned, 'B');
+            eastTurnBricks(row, column, currentPosCloned, 'B');
+            southEastTurnBricks(row, column, currentPosCloned, 'B');
+            southTurnBricks(row, column, currentPosCloned, 'B');
+            southWestTurnBricks(row, column, currentPosCloned, 'B');
+            westTurnBricks(row, column, currentPosCloned, 'B');
+            northWestTurnBricks(row, column, currentPosCloned, 'B');
         }
+
         return currentPosCloned;
     }
+
+
+    /**
+     * @brief Flips the bricks in north direction from the current position.
+     *
+     * @param row the row of the placed brick
+     * @param column the column of the placed brick
+     * @param copiedPos the copied position with all the bricks that will be updated
+     * @param colour the color of the placed brick
+     */
+    private void northTurnBricks(int row, int column, OthelloPosition copiedPos, char colour){
+        if (checkNorth(row, column)) {
+            for (int i = row - 2; i > 0; i--) {
+                if (isFree(i, column)) {
+                    break;
+                }
+                if (isOwnSquare(i, column)) {
+                    break;
+                }
+                copiedPos.board[i][column] = colour;
+            }
+        }
+    }
+
+
+    /**
+     * @brief Flips the bricks in northEast direction from the current position.
+     *
+     * @param row the row of the placed brick
+     * @param column the column of the placed brick
+     * @param copiedPos the copied position with all the bricks that will be updated
+     * @param colour the color of the placed brick
+     */
+    private void northEastTurnBricks(int row, int column, OthelloPosition copiedPos, char colour) {
+        if(checkNorthEast(row, column)){
+            for (int i = 2; row - i > 0 && column + i <= BOARD_SIZE; i++) {
+                if (isFree(row - i, column + i)) {
+                    break;
+                }
+                if (isOwnSquare(row - i, column + i)) {
+                    break;
+                }
+                copiedPos.board[row - i][column + i] = colour;
+            }
+        }
+    }
+
+
+    /**
+     * @brief Flips the bricks in east direction from the current position.
+     *
+     * @param row the row of the placed brick
+     * @param column the column of the placed brick
+     * @param copiedPos the copied position with all the bricks that will be updated
+     * @param colour the color of the placed brick
+     */
+    private void eastTurnBricks(int row, int column, OthelloPosition copiedPos, char colour){
+        if(checkEast(row, column)){
+            for (int i = column + 2; i <= BOARD_SIZE; i++) {
+                if (isFree(row, i)) {
+                    break;
+                }
+                if (isOwnSquare(row, i)) {
+                    break;
+                }
+                copiedPos.board[row][i] = colour;
+            }
+        }
+    }
+
+    /**
+     * @brief Flips the bricks in southEast direction from the current position.
+     *
+     * @param row the row of the placed brick
+     * @param column the column of the placed brick
+     * @param copiedPos the copied position with all the bricks that will be updated
+     * @param colour the color of the placed brick
+     */
+    private void southEastTurnBricks(int row, int column, OthelloPosition copiedPos, char colour){
+        if(checkSouthEast(row, column)){
+            for (int i = 2; row + i <= BOARD_SIZE && column + i <= BOARD_SIZE; i++) {
+                if (isFree(row + i, column + i)) {
+                    break;
+                }
+                if (isOwnSquare(row + i, column + i)) {
+                    break;
+                }
+                copiedPos.board[row + i][column + i] = colour;
+            }
+        }
+    }
+
+    /**
+     * @brief Flips the bricks in south direction from the current position.
+     *
+     * @param row the row of the placed brick
+     * @param column the column of the placed brick
+     * @param copiedPos the copied position with all the bricks that will be updated
+     * @param colour the color of the placed brick
+     */
+    private void southTurnBricks(int row, int column, OthelloPosition copiedPos, char colour){
+        if(checkSouth(row, column)){
+            for (int i = row + 2; i <= BOARD_SIZE; i++) {
+                if (isFree(i, column)) {
+                    break;
+                }
+                if (isOwnSquare(i, column)) {
+                    break;
+                }
+                copiedPos.board[i][column] = colour;
+            }
+        }
+    }
+
+
+    /**
+     * @brief Flips the bricks in southWest direction from the current position.
+     *
+     * @param row the row of the placed brick
+     * @param column the column of the placed brick
+     * @param copiedPos the copied position with all the bricks that will be updated
+     * @param colour the color of the placed brick
+     */
+    private void southWestTurnBricks(int row, int column, OthelloPosition copiedPos, char colour){
+        if(checkSouthWest(row, column)){
+            for (int i = 2; row + i <= BOARD_SIZE && column - i > 0; i++) {
+                if (isFree(row + i, column - i)) {
+                    break;
+                }
+                if (isOwnSquare(row + i, column - i)) {
+                    break;
+                }
+                copiedPos.board[row + i][column - i] = colour;
+            }
+        }
+    }
+
+
+    /**
+     * @brief Flips the bricks in west direction from the current position.
+     *
+     * @param row the row of the placed brick
+     * @param column the column of the placed brick
+     * @param copiedPos the copied position with all the bricks that will be updated
+     * @param colour the color of the placed brick
+     */
+    private void westTurnBricks(int row, int column, OthelloPosition copiedPos, char colour){
+        if(checkWest(row, column)){
+            for (int i = column - 2; i > 0; i--) {
+                if (isFree(row, i)) {
+                    break;
+                }
+                if (isOwnSquare(row, i)) {
+                    break;
+                }
+                copiedPos.board[row][i] = colour;
+            }
+        }
+    }
+
+    /**
+     * @brief Flips the bricks in northWest direction from the current position.
+     *
+     * @param row the row of the placed brick
+     * @param column the column of the placed brick
+     * @param copiedPos the copied position with all the bricks that will be updated
+     * @param colour the color of the placed brick
+     */
+    private void northWestTurnBricks(int row, int column, OthelloPosition copiedPos, char colour){
+        if(checkNorthWest(row, column)){
+            for (int i = 2; row - i > 0 && column + i <= BOARD_SIZE; i++) {
+                if (isFree(row - i, column + i)) {
+                    break;
+                }
+                if (isOwnSquare(row - i, column + i)) {
+                    break;
+                }
+                copiedPos.board[row - i][column + i] = colour;
+            }
+        }
+    }
+
+
 
     private void checkSoInsideBoard(int row, int column, OthelloAction action) throws IllegalMoveException {
         if (row < 1 || row > BOARD_SIZE)
@@ -627,9 +569,9 @@ public class OthelloPosition {
     }
 
     private OthelloPosition moveShouldBePassed() {
-            OthelloPosition thisPosition = this.clone();
-            thisPosition.maxPlayer = !this.maxPlayer;
-            return thisPosition;
+        OthelloPosition thisPosition = this.clone();
+        thisPosition.maxPlayer = !this.maxPlayer;
+        return thisPosition;
     }
 
     /**
