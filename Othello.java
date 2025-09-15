@@ -49,14 +49,22 @@ public class Othello{
 		long timeLimitNanos = (long) (timeLimitSeconds * 1_000_000_000L);
 		long startTime = System.nanoTime();
 
+		OthelloAction previousAction = null;
+
+
 		while (true) {
+			if(move != null){
+				previousAction = move;
+			}
 			long timeTaken = System.nanoTime() - startTime;
+			// We take the previous action.
 			if (timeTaken >= timeLimitNanos) {
+				move = previousAction;
 				break;
 			}
 
 			algorithm.setSearchDepth(searchDepth);
-			move = algorithm.evaluate(pos);
+			move = algorithm.evaluate(pos, timeLimitNanos, startTime);
 			searchDepth++;
 		}
 
