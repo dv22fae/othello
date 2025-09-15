@@ -41,9 +41,8 @@ public class AlphaBeta implements OthelloAlgorithm {
 	}
 
 
-	public OthelloAction evaluate(OthelloPosition pos, long timeLimitNano, long startTime) {
+	public OthelloAction evaluate(OthelloPosition pos) {
 		OthelloAction bestAction = null;
-		OthelloAction previousBestAction = null;
 
 		// Keeps track on the best action from the root (current position).
 		LinkedList<OthelloAction> possibleActions = pos.getMoves();
@@ -57,13 +56,6 @@ public class AlphaBeta implements OthelloAlgorithm {
 		if(pos.toMove()){
 			int bestScore = NEG_INFINITY;
 			for (OthelloAction action : possibleActions) {
-				// Return previous bestAction because we overstepped the time.
-				// Might need more checks on time.
-				long timeTaken = System.nanoTime() - startTime;
-				if (timeTaken >= timeLimitNano) {
-					return previousBestAction;
-				}
-
 				try {
 					OthelloPosition newPos = pos.makeMove(action);
 
@@ -71,7 +63,6 @@ public class AlphaBeta implements OthelloAlgorithm {
 
 					if(score > bestScore){
 						bestScore = score;
-						previousBestAction = bestAction;
 						bestAction = action;
 					}
 				} catch (IllegalMoveException e){
@@ -84,13 +75,6 @@ public class AlphaBeta implements OthelloAlgorithm {
 		else{
 			int bestScore = POS_INFINITY;
 			for (OthelloAction action : possibleActions) {
-				// Return previous bestAction because we overstepped the time.
-				// Might need more checks on time.
-				long timeTaken = System.nanoTime() - startTime;
-				if (timeTaken >= timeLimitNano) {
-					return previousBestAction;
-				}
-
 				try {
 					OthelloPosition newPos = pos.makeMove(action);
 
@@ -98,7 +82,6 @@ public class AlphaBeta implements OthelloAlgorithm {
 
 					if(score < bestScore){
 						bestScore = score;
-						previousBestAction = bestAction;
 						bestAction = action;
 					}
 				}catch (IllegalMoveException e){
