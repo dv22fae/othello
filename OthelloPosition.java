@@ -343,32 +343,39 @@ public class OthelloPosition {
 
         boolean whitesMove = this.maxPlayer;
 
+        // Lay the played stone on the copied board.
+        if (whitesMove) {
+            currentPosCloned.board[row][column] = 'W';
+        } else {
+            currentPosCloned.board[row][column] = 'B';
+        }
+
         // Flips the black bricks to white according to the placed white brick.
         if(whitesMove) {
-            northTurnBricks(row, column, currentPosCloned, 'W');
-            northEastTurnBricks(row, column, currentPosCloned, 'W');
-            eastTurnBricks(row, column, currentPosCloned, 'W');
-            southEastTurnBricks(row, column, currentPosCloned, 'W');
-            southTurnBricks(row, column, currentPosCloned, 'W');
-            southWestTurnBricks(row, column, currentPosCloned, 'W');
-            westTurnBricks(row, column, currentPosCloned, 'W');
-            northWestTurnBricks(row, column, currentPosCloned, 'W');
+            turnOverBricksAllDirections(row, column, currentPosCloned, 'W');
         }
 
         // Flips the white bricks to black according to the placed black brick.
         else{
-            northTurnBricks(row, column, currentPosCloned, 'B');
-            northEastTurnBricks(row, column, currentPosCloned, 'B');
-            eastTurnBricks(row, column, currentPosCloned, 'B');
-            southEastTurnBricks(row, column, currentPosCloned, 'B');
-            southTurnBricks(row, column, currentPosCloned, 'B');
-            southWestTurnBricks(row, column, currentPosCloned, 'B');
-            westTurnBricks(row, column, currentPosCloned, 'B');
-            northWestTurnBricks(row, column, currentPosCloned, 'B');
+            turnOverBricksAllDirections(row, column, currentPosCloned, 'B');
         }
+        // Switch side to move
+        currentPosCloned.maxPlayer = !this.maxPlayer;
 
         return currentPosCloned;
     }
+
+    private void turnOverBricksAllDirections(int row, int column, OthelloPosition copiedPos, char colour) {
+        northTurnBricks(row, column, copiedPos, colour);
+        northEastTurnBricks(row, column, copiedPos, colour);
+        eastTurnBricks(row, column, copiedPos, colour);
+        southEastTurnBricks(row, column, copiedPos, colour);
+        southTurnBricks(row, column, copiedPos, colour);
+        southWestTurnBricks(row, column, copiedPos, colour);
+        westTurnBricks(row, column, copiedPos, colour);
+        northWestTurnBricks(row, column, copiedPos, colour);
+    }
+
 
 
     /**
@@ -538,15 +545,15 @@ public class OthelloPosition {
      * @param colour the color of the placed brick
      */
     private void northWestTurnBricks(int row, int column, OthelloPosition copiedPos, char colour){
-        if(checkNorthWest(row, column)){
-            for (int i = 2; row - i > 0 && column + i <= BOARD_SIZE; i++) {
-                if (isFree(row - i, column + i)) {
+        if (checkNorthWest(row, column)) {
+            for (int i = 2; row - i > 0 && column - i < 0; i++) {
+                if (isFree(row - i, column - i)) {
                     break;
                 }
-                if (isOwnSquare(row - i, column + i)) {
+                if (isOwnSquare(row - i, column - i)) {
                     break;
                 }
-                copiedPos.board[row - i][column + i] = colour;
+                copiedPos.board[row - i][column - i] = colour;
             }
         }
     }

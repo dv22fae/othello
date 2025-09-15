@@ -44,16 +44,19 @@ public class Othello{
 
 		// Iterative depth search with time limit.
 		int searchDepth = 1;
-		long timeLimit = Long.parseLong(args[1]) * 1_000_000;
+
+		double timeLimitSeconds = Double.parseDouble(args[1]);
+		long timeLimitNanos = (long) (timeLimitSeconds * 1_000_000_000L);
 		long startTime = System.nanoTime();
-		while(true){
+
+		while (true) {
 			long timeTaken = System.nanoTime() - startTime;
-			if(timeTaken >= timeLimit){
+			if (timeTaken >= timeLimitNanos) {
 				break;
 			}
+
 			algorithm.setSearchDepth(searchDepth);
 			move = algorithm.evaluate(pos);
-
 			searchDepth++;
 		}
 
