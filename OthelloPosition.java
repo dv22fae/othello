@@ -3,7 +3,7 @@ import java.util.*;
 /**
  * This class is used to represent game positions. It uses a 2-dimensional char
  * array for the board and a Boolean to keep track of which player has the move.
- * 
+ *
  * @author Henrik Bj&ouml;rklund
  */
 
@@ -265,7 +265,7 @@ public class OthelloPosition {
     /**
      * Check if the position is a candidate for a move (not empty and has a
      * neighbour)
-     * 
+     *
      * @return true if it is a candidate
      */
     private boolean isCandidate(int row, int column) {
@@ -278,7 +278,7 @@ public class OthelloPosition {
 
     /**
      * Check if the position has any non-empty squares
-     * 
+     *
      * @return true if is has any neighbours
      */
     private boolean hasNeighbor(int row, int column) {
@@ -345,9 +345,9 @@ public class OthelloPosition {
 
         // Lay the played stone on the copied board.
         //if (whitesMove) {
-            //currentPosCloned.board[row][column] = 'W';
+        //currentPosCloned.board[row][column] = 'W';
         //} else {
-           // currentPosCloned.board[row][column] = 'B';
+        // currentPosCloned.board[row][column] = 'B';
         //}
 
         // Flips the black bricks to white according to the placed white brick.
@@ -546,7 +546,7 @@ public class OthelloPosition {
      */
     private void northWestTurnBricks(int row, int column, OthelloPosition copiedPos, char colour){
         if (checkNorthWest(row, column)) {
-            for (int i = 2; row - i > 0 && column - i < 0; i++) {
+            for (int i = 2; row - i > 0 && column - i > 0; i++) {
                 if (isFree(row - i, column - i)) {
                     break;
                 }
