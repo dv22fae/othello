@@ -360,7 +360,7 @@ public class OthelloPosition {
             turnOverBricksAllDirections(row, column, currentPosCloned, 'B');
         }
         // Switch side to move
-        //currentPosCloned.maxPlayer = !this.maxPlayer;
+        currentPosCloned.maxPlayer = !this.maxPlayer;
 
         return currentPosCloned;
     }
