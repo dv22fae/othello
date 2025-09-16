@@ -349,9 +349,9 @@ public class OthelloPosition {
 
         // Lay the played stone on the copied board.
         //if (whitesMove) {
-        //currentPosCloned.board[row][column] = 'W';
+            //currentPosCloned.board[row][column] = 'W';
         //} else {
-        // currentPosCloned.board[row][column] = 'B';
+            //currentPosCloned.board[row][column] = 'B';
         //}
 
         // Flips the black bricks to white according to the placed white brick.
@@ -364,7 +364,7 @@ public class OthelloPosition {
             turnOverBricksAllDirections(row, column, currentPosCloned, 'B');
         }
         // Switch side to move
-        currentPosCloned.maxPlayer = !this.maxPlayer;
+        //currentPosCloned.maxPlayer = !this.maxPlayer;
 
         return currentPosCloned;
     }
