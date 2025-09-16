@@ -22,8 +22,10 @@ cd "$(dirname "$0")" # don't change this
 
 if [ $do_compile -eq 1 ]; then
 	# Compile the code:
-	javac *.java
+	javac *.java \
+	2> >(grep -v -E '^Picked up (JAVA_TOOL_OPTIONS|_JAVA_OPTIONS):' >&2)
 else
 	# Call your Java program with a position and time limit:
-	java Othello $position $time_limit
+	java Othello $position $time_limit \
+	2> >(grep -v -E '^Picked up (JAVA_TOOL_OPTIONS|_JAVA_OPTIONS):' >&2)
 fi
