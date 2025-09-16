@@ -10,103 +10,19 @@ public class EarlyGame implements OthelloEvaluator{
 
     private int[][] weightedMatrix;
 
+    /* Ideer, lägg weightedMatrix i Othelloposition och initialize den en gång i Othello.
+    Sedan använder man pos.weightedMatrix här så sliper man skapa den på nytt varje evaluering.
 
-    // Loads the matrix with weights corresponding to how good squares are to hold.
-    private void initializeWeightedMatrix(){
-        weightedMatrix = new int[9][9];
+    Man kan också bygga in antalet drag man har tillgång till vid varje position för att det är bra
+    så man har mycket valbarheter.
 
-        for (int i = 1; i <= 8; i++) {
-            for (int j = 1; j <= 8; j++) {
-                // First and last row
-                if (i == 1 || i == 8){
-                    // Corners very good
-                    if(j == 1 || j == 8){
-                        weightedMatrix[i][j] = 100;
-                    }
+    Också i position kan man ha koll på hur många brickor som är lagda för att avgöra om det är
+    early game, middlegame eller lategame.
 
-                    // Corner neighbours very bad as long as you do not have the corner.
-                    else if(j == 2 || j == 7){
-                        weightedMatrix[i][j] = -10;
-                    }
+    Vid väldigt lategame så borde antalet brickor vara viktigare än vikterna i matrisen?
 
-                    // Good square because in order to flip this square the opponent needs to place it in a corner neighbour
-                    // which is bad for the opponent since I can take the corner then.
-                    else if(j == 3 || j == 6){
-                        weightedMatrix[i][j] = 10;
-                    }
-
-                    // col 4 and 5 are also good squares.
-                    else{
-                        weightedMatrix[i][j] = 5;
-
-                    }
-                }
-
-                // Second and 7th row are bad squares since they allow opponent to take edge squares.
-                else if(i == 2 || i == 7){
-                    // Corner neighbours are bad.
-                    if(j == 1 || j == 8){
-                        weightedMatrix[i][j] = -10;
-                    }
-
-                    // Very bad square since it allows opponent to take corner and 2 edge squares.
-                    else if(j == 2 || j == 7){
-                        weightedMatrix[i][j] = -20;
-                    }
-
-                    // Bad square since it allows opponent to grab and edge square.
-                    else{
-                        weightedMatrix[i][j] = -3;
-                    }
-                }
-
-                // Good squares to control.
-                else if(i == 3 || i == 6){
-
-                    // Very good square because if opponent takes it, it will oen up for you to take corner.
-                    if(j == 1 || j == 8){
-                        weightedMatrix[i][j] = 10;
-                    }
-
-                    // Bad square because it allows opponent to get a good edge square.
-                    else if(j == 2 || j == 7){
-                        weightedMatrix[i][j] = -3;
-                    }
-
-                    // Good square because to take this square the opponent must place a bad square.
-                    else if(j == 3 || j == 6){
-                        weightedMatrix[i][j] = 7;
-                    }
-
-                    // average squares, it allows opponent to take good or bad squares.
-                    else{
-                        weightedMatrix[i][j] = 1;
-                    }
-
-                }
-
-                // Two middle rows are pretty good.
-                else{
-                    // Edge squares are good, but also it allows opponent to take good edge squares
-                    if(j == 1 || j == 8){
-                        weightedMatrix[i][j] = 3;
-                    }
-
-                    // Bad squares since it opens for taking the edge square for the opponent.
-                    else if (j == 2 || j == 7){
-                        weightedMatrix[i][j] = -3;
-                    }
-
-                    // Rest of the squares are average since they open up for the opponent to get a good or bad square.
-                    else{
-                        weightedMatrix[i][j] = 1;
-                    }
-
-                }
-            }
-        }
-    }
-
+    Kanske ta bort middle game och ha endast early game och lategame?
+     */
     // Ska den endast evaluera white 'W' till positiv, eller svart med eftersom man spelar som svart i script?
     @Override
     public int evaluate(OthelloPosition pos) {
@@ -127,12 +43,130 @@ public class EarlyGame implements OthelloEvaluator{
             }
         }
 
-        return totalWeightWhite -totalWeightBlack;
+        return totalWeightWhite - totalWeightBlack;
 
         //OthelloPosition position = (OthelloPosition) pos;
 
         //return evaluateNumWhiteBricks(position) + evaluateCorners(position) + evaluateCornerNeighbours(position) +evaluateMiddleControlFirstLayer(position) + evaluateGoodEdgeSquares(position);
     }
+
+
+
+    // Loads the matrix with weights corresponding to how good squares are to hold.
+    private void initializeWeightedMatrix(){
+        weightedMatrix = new int[9][9];
+
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j <= 8; j++) {
+
+                // First and last row are generally very good squares
+                if (i == 1 || i == 8){
+                    matrixInitializeFirstAndLastRow(i, j);
+                }
+
+                // Second and 7th row are bad squares since they allow opponent to take edge squares.
+                else if(i == 2 || i == 7){
+                    matrixInitializeSecondAndSecondLastRow(i, j);
+                }
+
+                // Good squares to control.
+                else if(i == 3 || i == 6){
+                    matrixInitializeThirdAndThirdLastRow(i, j);
+                }
+
+                // Two middle rows are pretty good squares.
+                else{
+                    matrixInitializeMiddleRows(i, j);
+                }
+            }
+        }
+    }
+
+    private void matrixInitializeFirstAndLastRow(int i, int j){
+        // Corners are very good
+        if(j == 1 || j == 8){
+            weightedMatrix[i][j] = 100;
+        }
+
+        // Corner neighbours are bad as long as you do not have the corner.
+        else if(j == 2 || j == 7){
+            weightedMatrix[i][j] = -10;
+        }
+
+        // Good square because in order to flip this square the opponent needs to place it in a bad square.
+        else if(j == 3 || j == 6){
+            weightedMatrix[i][j] = 10;
+        }
+
+        // col 4 and 5 are good squares.
+        else{
+            weightedMatrix[i][j] = 5;
+        }
+    }
+
+    private void matrixInitializeSecondAndSecondLastRow(int i, int j){
+        // Corner neighbours are bad because it can allow opponent to take a corner.
+        if(j == 1 || j == 8){
+            weightedMatrix[i][j] = -10;
+        }
+
+        // Very bad square since it allows opponent to take corner and 2 edge squares.
+        else if(j == 2 || j == 7){
+            weightedMatrix[i][j] = -20;
+        }
+
+        // Bad squares since it allows opponent to grab and edge square.
+        else{
+            weightedMatrix[i][j] = -3;
+        }
+    }
+
+    private void matrixInitializeThirdAndThirdLastRow(int i, int j){
+        // Very good square because if opponent takes it, it will open up for you to take corner.
+        if(j == 1 || j == 8){
+            weightedMatrix[i][j] = 10;
+        }
+
+        // Bad square because it allows opponent to get a good edge square.
+        else if(j == 2 || j == 7){
+            weightedMatrix[i][j] = -3;
+        }
+
+        // Good square because to take this square the opponent must almost always place a bad square.
+        else if(j == 3 || j == 6){
+            weightedMatrix[i][j] = 7;
+        }
+
+        // average squares, it allows opponent to take either good or bad squares.
+        else{
+            weightedMatrix[i][j] = 1;
+        }
+    }
+
+    private void matrixInitializeMiddleRows(int i, int j){
+        // Edge squares are good, but it also allows opponent to take good edge squares
+        if(j == 1 || j == 8){
+            weightedMatrix[i][j] = 3;
+        }
+
+        // Bad squares since it opens for taking the edge square for the opponent.
+        else if (j == 2 || j == 7){
+            weightedMatrix[i][j] = -3;
+        }
+
+        // Rest of the squares are average since they open up for the opponent to get a good or bad square.
+        else{
+            weightedMatrix[i][j] = 1;
+        }
+    }
+
+
+
+
+
+
+
+
 
     public int evaluateNumWhiteBricks(OthelloPosition pos) {
         int blackSquares = 0;
