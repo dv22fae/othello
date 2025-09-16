@@ -326,6 +326,9 @@ public class OthelloPosition {
     public OthelloPosition makeMove(OthelloAction action) throws IllegalMoveException {
         // If the action is a pass action.
         if (action.isPassMove()) {
+            if (!getMoves().isEmpty()){
+                throw new IllegalMoveException(action);
+            }
             return moveShouldBePassed();
         }
 
@@ -333,9 +336,10 @@ public class OthelloPosition {
         int row = action.getRow();
         int column = action.getColumn();
 
+        checkSoInsideBoard(row, column, action);
         // Checks if there is any bricks that can be flipped with this move.
         if(!isMove(row, column)){
-            return moveShouldBePassed();
+            throw new IllegalMoveException(action);
         }
 
         // Makes a copy of the current position on the board, we will not modify the original position.
@@ -351,7 +355,7 @@ public class OthelloPosition {
         //}
 
         // Flips the black bricks to white according to the placed white brick.
-        if(whitesMove) {
+        if (whitesMove) {
             turnOverBricksAllDirections(row, column, currentPosCloned, 'W');
         }
 
