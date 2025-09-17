@@ -1,3 +1,5 @@
+import java.util.LinkedList;
+
 public class EarlyGame implements OthelloEvaluator{
 
     private static final int NUM_WHITE_SQUARES_WEIGHT = 10;
@@ -26,7 +28,28 @@ public class EarlyGame implements OthelloEvaluator{
     // Ska den endast evaluera white 'W' till positiv, eller svart med eftersom man spelar som svart i script?
     @Override
     public int evaluate(OthelloPosition pos) {
+        int whiteNumMoves = 0;
+        int blackNumMoves = 0;
+
+        LinkedList<OthelloAction> actions = pos.getMoves();
+
+        // White
+        if(pos.maxPlayer){
+            if(actions != null){
+                whiteNumMoves = actions.size();
+            }
+        }
+
+        // Black
+        else{
+            if(actions != null){
+                blackNumMoves = actions.size();
+            }
+        }
+
+
         initializeWeightedMatrix();
+        //weightedMatrixPrint();
 
         int totalWeightWhite = 0;
         int totalWeightBlack = 0;
@@ -43,7 +66,10 @@ public class EarlyGame implements OthelloEvaluator{
             }
         }
 
-        return totalWeightWhite - totalWeightBlack;
+        // HMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM kanske inte helt korrekt hmmmmmmmmmmmmmmmmmm.
+        // Kanske måste att svart ska försöka få så högt som möjligt när vi är svart,
+        // Å samma på vit.
+        return totalWeightWhite + whiteNumMoves - totalWeightBlack + blackNumMoves;
 
         //OthelloPosition position = (OthelloPosition) pos;
 
@@ -323,5 +349,13 @@ public class EarlyGame implements OthelloEvaluator{
         }
 
         return numGoodEdgeSquares * NUM_GOOD_EDGE_SQUARES_WEIGHT;
+    }
+
+    private void weightedMatrixPrint(){
+        for(int i = 1; i <= 8; i++){
+            for(int j = 1; j <= 8; j++){
+                System.out.println(i + "," + j + "      " + weightedMatrix[i][j]);
+            }
+        }
     }
 }
