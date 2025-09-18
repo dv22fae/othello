@@ -34,18 +34,18 @@ public class EarlyGame implements OthelloEvaluator{
         LinkedList<OthelloAction> actions = pos.getMoves();
 
         // White
-        if(pos.maxPlayer){
+        /*if(pos.maxPlayer){
             if(actions != null){
                 whiteNumMoves = actions.size();
             }
-        }
+        }*/
 
         // Black
-        else{
+        /*else{
             if(actions != null){
                 blackNumMoves = actions.size();
             }
-        }
+        }*/
 
 
         initializeWeightedMatrix();
@@ -69,7 +69,7 @@ public class EarlyGame implements OthelloEvaluator{
         // HMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM kanske inte helt korrekt hmmmmmmmmmmmmmmmmmm.
         // Kanske måste att svart ska försöka få så högt som möjligt när vi är svart,
         // Å samma på vit.
-        return totalWeightWhite + whiteNumMoves - totalWeightBlack + blackNumMoves;
+        return totalWeightWhite - totalWeightBlack;
 
         //OthelloPosition position = (OthelloPosition) pos;
 
