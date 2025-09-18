@@ -48,7 +48,7 @@ public class EarlyGame implements OthelloEvaluator{
         }*/
 
 
-        initializeWeightedMatrix();
+        initializeWeightedMatrix(pos);
         //weightedMatrixPrint();
 
         int totalWeightWhite = 0;
@@ -79,7 +79,7 @@ public class EarlyGame implements OthelloEvaluator{
 
 
     // Loads the matrix with weights corresponding to how good squares are to hold.
-    private void initializeWeightedMatrix(){
+    private void initializeWeightedMatrix(OthelloPosition pos){
         weightedMatrix = new int[9][9];
 
         for (int i = 1; i <= 8; i++) {
@@ -87,12 +87,12 @@ public class EarlyGame implements OthelloEvaluator{
 
                 // First and last row are generally very good squares
                 if (i == 1 || i == 8){
-                    matrixInitializeFirstAndLastRow(i, j);
+                    matrixInitializeFirstAndLastRow(i, j, pos);
                 }
 
                 // Second and 7th row are bad squares since they allow opponent to take edge squares.
                 else if(i == 2 || i == 7){
-                    matrixInitializeSecondAndSecondLastRow(i, j);
+                    matrixInitializeSecondAndSecondLastRow(i, j, pos);
                 }
 
                 // Good squares to control.
@@ -108,45 +108,130 @@ public class EarlyGame implements OthelloEvaluator{
         }
     }
 
-    private void matrixInitializeFirstAndLastRow(int i, int j){
+    private void matrixInitializeFirstAndLastRow(int i, int j, OthelloPosition pos){
         // Corners are very good
         if(j == 1 || j == 8){
             weightedMatrix[i][j] = 100;
         }
 
         // Corner neighbours are bad as long as you do not have the corner.
-        else if(j == 2 || j == 7){
-            weightedMatrix[i][j] = -10;
+        else if(j == 2){
+
+            // If you already own the corner then this square is good, otherwise it is bad.
+            if(pos.board[i][j - 1] == 'W'){
+                weightedMatrix[i][j] = 7;
+            }
+            else{
+                weightedMatrix[i][j] = -10;
+            }
+        }
+
+        else if(j == 7){
+            // If you already own the corner then this square is good, otherwise it is bad.
+            if(pos.board[i][j + 1] == 'W'){
+                weightedMatrix[i][j] = 7;
+            }
+            else{
+                weightedMatrix[i][j] = -10;
+            }
         }
 
         // Good square because in order to flip this square the opponent needs to place it in a bad square.
-        else if(j == 3 || j == 6){
-            weightedMatrix[i][j] = 10;
+        else if(j == 3){
+            // If you already own the corner it is still a good square, but less good.
+            if(pos.board[i][j - 2] == 'W'){
+                weightedMatrix[i][j] = 5;
+            }
+            else{
+                weightedMatrix[i][j] = 10;
+            }
+        }
+
+        else if(j == 6){
+            // If you already own the corner it is still a good square, but less good.
+            if(pos.board[i][j + 2] == 'W'){
+                weightedMatrix[i][j] = 5;
+            }
+            else{
+                weightedMatrix[i][j] = 10;
+            }
         }
 
         // col 4 and 5 are good squares.
-        else{
-            weightedMatrix[i][j] = 5;
+        else if(j == 4 || j == 5){
+
+            // If the neighbours to the side are also white the square becomes better.
+            // Maybe check all the way to corners?
+            if(weightedMatrix[i][j - 1] == 'W' && weightedMatrix[i][j + 1] == 'W'){
+                weightedMatrix[i][j] = 5;
+            }
+            else{
+                weightedMatrix[i][j] = 5;
+            }
         }
     }
 
-    private void matrixInitializeSecondAndSecondLastRow(int i, int j){
+    private void matrixInitializeSecondAndSecondLastRow(int i, int j, OthelloPosition pos){
         // Corner neighbours are bad because it can allow opponent to take a corner.
-        if(j == 1 || j == 8){
-            weightedMatrix[i][j] = -10;
+        if(j == 1){
+
+            // If the corner is already taken it is a good square.
+            if(pos.board[i - 1][j] == 'W'){
+                weightedMatrix[i][j] = 7;
+            }
+            else{
+                weightedMatrix[i][j] = -10;
+            }
+        }
+        else if(j == 8){
+
+            // If the corner is already taken it is a good square.
+            if(pos.board[i - 1][j] == 'W'){
+                weightedMatrix[i][j] = 7;
+            }
+            else{
+                weightedMatrix[i][j] = -10;
+            }
         }
 
         // Very bad square since it allows opponent to take corner and 2 edge squares.
-        else if(j == 2 || j == 7){
-            weightedMatrix[i][j] = -20;
+        else if(j == 2){
+
+            // If you have the corner and the pos to the left and the pos upwards then it's a decent square.
+            if(pos.board[i][j - 1] == 'W' && pos.board[i - 1][j] == 'W' && pos.board[i - 1][j - 1] == 'W'){
+                weightedMatrix[i][j] = 3;
+            }
+            else{
+                weightedMatrix[i][j] = -20;
+            }
+        }
+
+        // Very bad square since it allows opponent to take corner and 2 edge squares.
+        else if(j == 7){
+
+            // If you have the corner and the pos to the left and the pos upwards then it's a decent square.
+            if(pos.board[i][j + 1] == 'W' && pos.board[i + 1][j] == 'W' && pos.board[i - 1][j + 1] == 'W'){
+                weightedMatrix[i][j] = 3;
+            }
+            else{
+                weightedMatrix[i][j] = -20;
+            }
         }
 
         // Bad squares since it allows opponent to grab and edge square.
         else{
-            weightedMatrix[i][j] = -3;
+
+            // If the corresponding edge square is already take the square is decent.
+            if(pos.board[i - 1][j] == 'W'){
+                weightedMatrix[i][j] = 3;
+            }
+            else{
+                weightedMatrix[i][j] = -3;
+            }
         }
     }
 
+    // Ej uppdaterad.
     private void matrixInitializeThirdAndThirdLastRow(int i, int j){
         // Very good square because if opponent takes it, it will open up for you to take corner.
         if(j == 1 || j == 8){
