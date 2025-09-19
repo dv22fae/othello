@@ -113,7 +113,6 @@ public class Othello{
 			}
 		}
 
-
 		//move.print();
 		bestAction.print();
 	}
