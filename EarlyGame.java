@@ -118,7 +118,7 @@ public class EarlyGame implements OthelloEvaluator{
         else if(j == 2){
 
             // If you already own the corner then this square is good, otherwise it is bad.
-            if(pos.board[i][j - 1] == 'W'){
+            if(pos.isOwnSquare(i, j - 1)){
                 weightedMatrix[i][j] = 7;
             }
             else{
@@ -128,7 +128,7 @@ public class EarlyGame implements OthelloEvaluator{
 
         else if(j == 7){
             // If you already own the corner then this square is good, otherwise it is bad.
-            if(pos.board[i][j + 1] == 'W'){
+            if(pos.isOwnSquare(i, j + 1)){
                 weightedMatrix[i][j] = 7;
             }
             else{
@@ -139,7 +139,7 @@ public class EarlyGame implements OthelloEvaluator{
         // Good square because in order to flip this square the opponent needs to place it in a bad square.
         else if(j == 3){
             // If you already own the corner it is still a good square, but less good.
-            if(pos.board[i][j - 2] == 'W'){
+            if(pos.isOwnSquare(i, j - 2)){
                 weightedMatrix[i][j] = 5;
             }
             else{
@@ -149,7 +149,7 @@ public class EarlyGame implements OthelloEvaluator{
 
         else if(j == 6){
             // If you already own the corner it is still a good square, but less good.
-            if(pos.board[i][j + 2] == 'W'){
+            if(pos.isOwnSquare(i, j + 2)){
                 weightedMatrix[i][j] = 5;
             }
             else{
@@ -162,7 +162,7 @@ public class EarlyGame implements OthelloEvaluator{
 
             // If the neighbours to the side are also white the square becomes better.
             // Maybe check all the way to corners?
-            if(weightedMatrix[i][j - 1] == 'W' && weightedMatrix[i][j + 1] == 'W'){
+            if(pos.isOwnSquare(i, j -1) && pos.isOwnSquare(i, j + 1)){
                 weightedMatrix[i][j] = 5;
             }
             else{
@@ -176,7 +176,7 @@ public class EarlyGame implements OthelloEvaluator{
         if(j == 1){
 
             // If the corner is already taken it is a good square.
-            if(pos.board[i - 1][j] == 'W'){
+            if(pos.isOwnSquare(i - 1, j)){
                 weightedMatrix[i][j] = 7;
             }
             else{
@@ -186,7 +186,7 @@ public class EarlyGame implements OthelloEvaluator{
         else if(j == 8){
 
             // If the corner is already taken it is a good square.
-            if(pos.board[i - 1][j] == 'W'){
+            if(pos.isOwnSquare(i - 1, j)){
                 weightedMatrix[i][j] = 7;
             }
             else{
@@ -198,7 +198,7 @@ public class EarlyGame implements OthelloEvaluator{
         else if(j == 2){
 
             // If you have the corner and the pos to the left and the pos upwards then it's a decent square.
-            if(pos.board[i][j - 1] == 'W' && pos.board[i - 1][j] == 'W' && pos.board[i - 1][j - 1] == 'W'){
+            if( pos.isOwnSquare(i, j - 1) && pos.isOwnSquare(i - 1, j) && pos.isOwnSquare(i - 1, j - 1)){
                 weightedMatrix[i][j] = 3;
             }
             else{
@@ -210,7 +210,7 @@ public class EarlyGame implements OthelloEvaluator{
         else if(j == 7){
 
             // If you have the corner and the pos to the left and the pos upwards then it's a decent square.
-            if(pos.board[i][j + 1] == 'W' && pos.board[i + 1][j] == 'W' && pos.board[i - 1][j + 1] == 'W'){
+            if(pos.isOwnSquare(i, j + 1) && pos.isOwnSquare(i + 1, j) && pos.isOwnSquare(i - 1, j + 1)){
                 weightedMatrix[i][j] = 3;
             }
             else{
@@ -222,7 +222,7 @@ public class EarlyGame implements OthelloEvaluator{
         else{
 
             // If the corresponding edge square is already take the square is decent.
-            if(pos.board[i - 1][j] == 'W'){
+            if(pos.isOwnSquare(i - 1, j)){
                 weightedMatrix[i][j] = 3;
             }
             else{
@@ -231,7 +231,7 @@ public class EarlyGame implements OthelloEvaluator{
         }
     }
 
-    // Ej uppdaterad.
+    // Ej uppdaterad. BHÖVER UPPDATERAS
     private void matrixInitializeThirdAndThirdLastRow(int i, int j){
         // Very good square because if opponent takes it, it will open up for you to take corner.
         if(j == 1 || j == 8){
@@ -271,6 +271,682 @@ public class EarlyGame implements OthelloEvaluator{
         }
     }
 
+
+    /*
+    private void matrixInitializeFirstAndLastRow(int i, int j){
+        // Corners are very good
+        if(j == 1 || j == 8){
+            weightedMatrix[i][j] = 100;
+        }
+
+        // Corner neighbours are bad as long as you do not have the corner.
+        else if(j == 2 || j == 7){
+            weightedMatrix[i][j] = -10;
+        }
+
+        // Good square because in order to flip this square the opponent needs to place it in a bad square.
+        else if(j == 3 || j == 6){
+            weightedMatrix[i][j] = 10;
+        }
+
+        // col 4 and 5 are good squares.
+        else{
+            weightedMatrix[i][j] = 5;
+        }
+    }
+
+    private void matrixInitializeSecondAndSecondLastRow(int i, int j){
+        // Corner neighbours are bad because it can allow opponent to take a corner.
+        if(j == 1 || j == 8){
+            weightedMatrix[i][j] = -10;
+        }
+
+        // Very bad square since it allows opponent to take corner and 2 edge squares.
+        else if(j == 2 || j == 7){
+            weightedMatrix[i][j] = -20;
+        }
+
+        // Bad squares since it allows opponent to grab and edge square.
+        else{
+            weightedMatrix[i][j] = -3;
+        }
+    }
+
+    private void matrixInitializeThirdAndThirdLastRow(int i, int j){
+        // Very good square because if opponent takes it, it will open up for you to take corner.
+        if(j == 1 || j == 8){
+            weightedMatrix[i][j] = 10;
+        }
+
+        // Bad square because it allows opponent to get a good edge square.
+        else if(j == 2 || j == 7){
+            weightedMatrix[i][j] = -3;
+        }
+
+        // Good square because to take this square the opponent must almost always place a bad square.
+        else if(j == 3 || j == 6){
+            weightedMatrix[i][j] = 7;
+        }
+
+        // average squares, it allows opponent to take either good or bad squares.
+        else{
+            weightedMatrix[i][j] = 1;
+        }
+    }
+
+    private void matrixInitializeMiddleRows(int i, int j){
+        // Edge squares are good, but it also allows opponent to take good edge squares
+        if(j == 1 || j == 8){
+            weightedMatrix[i][j] = 3;
+        }
+
+        // Bad squares since it opens for taking the edge square for the opponent.
+        else if (j == 2 || j == 7){
+            weightedMatrix[i][j] = -3;
+        }
+
+        // Rest of the squares are average since they open up for the opponent to get a good or bad square.
+        else{
+            weightedMatrix[i][j] = 1;
+        }
+    }
+*/
+
+
+    /*
+    private void matrixInitializeFirstAndLastRow(int i, int j, OthelloPosition pos){
+        // Corners are very good
+        if(j == 1 || j == 8){
+
+            if(pos.board[i][j] == 'W'){
+                weightedMatrix[i][j] = 100;
+            }
+            else if(pos.board[i][j] == 'B'){
+                weightedMatrix[i][j] = -100;
+            }
+        }
+
+
+
+        // Corner neighbours are bad as long as you do not have the corner.
+        else if(j == 2){
+            // If you already own the corner then this square is good, otherwise it is bad.
+            if(pos.board[i][j - 1] == 'W'){
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 7;
+                }
+                else if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -3;
+                }
+            }
+
+            else if(pos.board[i][j - 1] == 'B'){
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -7;
+                }
+                else if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 3;
+                }
+            }
+
+            else if(pos.board[i][j - 1] == 'E'){
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = -10;
+                }
+                else if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = 10;
+                }
+            }
+        }
+
+        else if(j == 7){
+            // If you already own the corner then this square is good, otherwise it is bad.
+            if(pos.board[i][j + 1] == 'W'){
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 7;
+                }
+                else if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -3;
+                }
+            }
+
+            else if(pos.board[i][j + 1] == 'B'){
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -7;
+                }
+                else if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 3;
+                }
+            }
+
+            else if(pos.board[i][j + 1] == 'E'){
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = -10;
+                }
+                else if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = 10;
+                }
+            }
+        }
+
+        // Good square because in order to flip this square the opponent needs to place it in a bad square.
+        else if(j == 3){
+            // If you already own the corner it is still a good square, but less good.
+            if(pos.board[i][j - 2] == 'W'){
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 5;
+                }
+                else if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -3;
+                }
+            }
+
+            else if(pos.board[i][j - 2] == 'B'){
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -5;
+                }
+                else if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 3;
+                }
+            }
+
+            else if(pos.board[i][j - 2] == 'E'){
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 10;
+                }
+                else if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -10;
+                }
+            }
+        }
+
+        else if(j == 6){
+            // If you already own the corner it is still a good square, but less good.
+            if(pos.board[i][j + 2] == 'W'){
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 5;
+                }
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -3;
+                }
+            }
+
+            else if(pos.board[i][j + 2] == 'B'){
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -5;
+                }
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 3;
+                }
+            }
+
+            else if(pos.board[i][j + 2] == 'E'){
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 10;
+                }
+                else if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -10;
+                }
+            }
+        }
+
+        // col 4 and 5 are good squares.
+        else if(j == 4 || j == 5){
+
+            // If the neighbours to the side are also white the square becomes better.
+            // Maybe check all the way to corners?
+            if(pos.board[i][j - 1] == 'W' && pos.board[i][j + 1] == 'W'){
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 5;
+                }
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -3;
+                }
+            }
+
+            else if(pos.board[i][j - 1] == 'B' && pos.board[i][j + 1] == 'B'){
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -5;
+                }
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 3;
+                }
+            }
+
+            else{
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 3;
+                }
+                else if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = 3;
+                }
+            }
+        }
+    }
+
+    private void matrixInitializeSecondAndSecondLastRow(int i, int j, OthelloPosition pos){
+        // Corner neighbours are bad because it can allow opponent to take a corner.
+        if(j == 1 || j == 8){
+
+            // If the corner is already taken it is a good square.
+            if(pos.board[i - 1][j] == 'W'){
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 7;
+                }
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -3;
+                }
+            }
+
+            // If the corner is already taken it is a good square.
+            else if(pos.board[i - 1][j] == 'B'){
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -7;
+                }
+
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 3;
+                }
+            }
+
+            else if(pos.board[i - 1][j] == 'E'){
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = -10;
+                }
+                else if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = 10;
+                }
+            }
+        }
+
+        // Very bad square since it allows opponent to take corner and 2 edge squares.
+        else if(j == 2){
+
+            // If you have the corner and the pos to the left and the pos upwards then it's a decent square.
+            if(pos.board[i][j - 1] == 'W' && pos.board[i - 1][j] == 'W' && pos.board[i - 1][j - 1] == 'W'){
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 3;
+                }
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -3;
+                }
+            }
+
+            // If you have the corner and the pos to the left and the pos upwards then it's a decent square.
+            else if(pos.board[i][j - 1] == 'B' && pos.board[i - 1][j] == 'B' && pos.board[i - 1][j - 1] == 'B'){
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -3;
+                }
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 3;
+                }
+            }
+
+            else{
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = -20;
+                }
+
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = 20;
+                }
+            }
+        }
+
+        // Very bad square since it allows opponent to take corner and 2 edge squares.
+        else if(j == 7){
+            // If you have the corner and the pos to the left and the pos upwards then it's a decent square.
+            if(pos.board[i][j + 1] == 'W' && pos.board[i + 1][j] == 'W' && pos.board[i - 1][j + 1] == 'W'){
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 3;
+                }
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -3;
+                }
+            }
+
+
+            else if(pos.board[i][j + 1] == 'B' && pos.board[i + 1][j] == 'B' && pos.board[i - 1][j + 1] == 'B'){
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -3;
+                }
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 3;
+                }
+            }
+
+            else{
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = -20;
+                }
+
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = 20;
+                }
+            }
+        }
+
+        // Bad squares since it allows opponent to grab and edge square.
+        else{
+            // If the corresponding edge square is already take the square is decent.
+            if(pos.board[i - 1][j] == 'W'){
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 3;
+                }
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -3;
+                }
+
+            }
+            else if(pos.board[i - 1][j] == 'B'){
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -3;
+                }
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 3;
+                }
+            }
+            else{
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = -5;
+                }
+                else if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = 5;
+                }
+            }
+        }
+
+    }
+
+    private void matrixInitializeThirdAndThirdLastRow(int i, int j, OthelloPosition pos){
+
+        // Very good square because if opponent takes it, it will open up for you to take corner.
+        if(j == 1 || j == 8){
+
+            // If you already own the corner it is still a good square, but less good.
+            if(pos.board[i - 2][j] == 'W'){
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 5;
+                }
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -3;
+                }
+            }
+
+            else if(pos.board[i - 2][j] == 'B'){
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -5;
+                }
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 3;
+                }
+            }
+
+            else if(pos.board[i - 2][j] == 'E'){
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 10;
+                }
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -10;
+                }
+            }
+        }
+
+        // Bad square because it allows opponent to get a good edge square.
+        else if(j == 2){
+            if(pos.board[i][j - 1] == 'W'){
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 3;
+                }
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -3;
+                }
+            }
+
+            else if(pos.board[i][j - 1] == 'B'){
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -3;
+                }
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 3;
+                }
+            }
+
+            else{
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = -5;
+                }
+
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = 5;
+                }
+            }
+        }
+
+        // Bad square because it allows opponent to get a good edge square.
+        else if(j == 7){
+            if(pos.board[i][j + 1] == 'W'){
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 3;
+                }
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -3;
+                }
+            }
+
+            else if(pos.board[i][j + 1] == 'B'){
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -3;
+                }
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 3;
+                }
+            }
+
+            else{
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = -5;
+                }
+
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = 5;
+                }
+            }
+
+        }
+
+        // Good square because to take this square the opponent must almost always place a bad square.
+        else if(j == 3){
+            if(pos.board[i - 2][j - 2] == 'E'){
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 7;
+                }
+                else if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -7;
+                }
+            }
+
+            // The corner is already ours, then it is less good
+            else if(pos.board[i - 2][j - 2] == 'W'){
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 5;
+                }
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -3;
+                }
+
+            }
+
+            // The corner is already ours, then it is less good
+            else if(pos.board[i - 2][j - 2] == 'B'){
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -5;
+                }
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 3;
+                }
+            }
+        }
+
+        else if(j == 6){
+            if(pos.board[i - 2][j + 2] == 'E'){
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 7;
+                }
+                else if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -7;
+                }
+            }
+
+            // The corner is already ours, then it is less good
+            else if(pos.board[i - 2][j + 2] == 'W'){
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 5;
+                }
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -3;
+                }
+
+            }
+
+            // The corner is already ours, then it is less good
+            else if(pos.board[i - 2][j + 2] == 'B'){
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -5;
+                }
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 3;
+                }
+            }
+        }
+
+        // average squares, it allows opponent to take either good or bad squares.
+        // Might be better squares? They control middle quite good.
+        else{
+            if(pos.board[i][j] == 'W'){
+                weightedMatrix[i][j] = 3;
+            }
+            else if(pos.board[i][j] == 'B'){
+                weightedMatrix[i][j] = -3;
+            }
+        }
+    }
+
+    private void matrixInitializeMiddleRows(int i, int j, OthelloPosition pos){
+        // Edge squares are good, but it also allows opponent to take good edge squares
+        if(j == 1 || j == 8){
+
+            // If the neighbours to the side are also white the square becomes better.
+            // Maybe check all the way to corners?
+            if(pos.board[i - 1][j] == 'W' && pos.board[i + 1][j] == 'W'){
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 5;
+                }
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -3;
+                }
+            }
+
+            else if(pos.board[i - 1][j] == 'B' && pos.board[i + 1][j] == 'B'){
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -5;
+                }
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 3;
+                }
+            }
+
+            else{
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 3;
+                }
+                else if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = 3;
+                }
+            }
+        }
+
+
+        // Bad squares since it opens for taking the edge square for the opponent.
+        else if (j == 2){
+            if(pos.board[i][j - 1] == 'W'){
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 3;
+                }
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -3;
+                }
+            }
+
+            else if(pos.board[i][j - 1] == 'B'){
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -3;
+                }
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 3;
+                }
+            }
+
+            else if(pos.board[i][j - 1] == 'E'){
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = -5;
+                }
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = 5;
+                }
+            }
+        }
+
+        else if(j == 7){
+            if(pos.board[i][j + 1] == 'W'){
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 3;
+                }
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -3;
+                }
+            }
+
+            else if(pos.board[i][j + 1] == 'B'){
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = -3;
+                }
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = 3;
+                }
+            }
+
+            else if(pos.board[i][j + 1] == 'E'){
+                if(pos.board[i][j] == 'W'){
+                    weightedMatrix[i][j] = -5;
+                }
+                if(pos.board[i][j] == 'B'){
+                    weightedMatrix[i][j] = 5;
+                }
+            }
+        }
+
+        // Decent squares that control the middle.
+        else if(j == 3 || j == 6){
+            if(pos.board[i][j] == 'W'){
+                weightedMatrix[i][j] = 3;
+            }
+            if(pos.board[i][j] == 'B'){
+                weightedMatrix[i][j] = -3;
+            }
+        }
+
+        // Better squares (4, 5) since they control the middle.
+        else{
+            if(pos.board[i][j] == 'W'){
+                weightedMatrix[i][j] = 5;
+            }
+            else if(pos.board[i][j] == 'B'){
+                weightedMatrix[i][j] = -5;
+            }
+        }
+    }
+*/
 
 
 

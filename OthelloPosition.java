@@ -243,7 +243,7 @@ public class OthelloPosition {
     /**
      * Check if the position is occupied by the opponent
      */
-    private boolean isOpponentSquare(int row, int column) {
+    public boolean isOpponentSquare(int row, int column) {
         if (maxPlayer && (board[row][column] == 'B'))
             return true;
         if (!maxPlayer && (board[row][column] == 'W'))
@@ -254,7 +254,7 @@ public class OthelloPosition {
     /**
      * Check if the position is occupied by the player
      */
-    private boolean isOwnSquare(int row, int column) {
+    public boolean isOwnSquare(int row, int column) {
         if (!maxPlayer && (board[row][column] == 'B'))
             return true;
         if (maxPlayer && (board[row][column] == 'W'))
