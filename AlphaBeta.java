@@ -16,6 +16,17 @@ public class AlphaBeta implements OthelloAlgorithm {
 	protected int searchDepth;
 	protected static final int DefaultDepth = 7;
 	protected OthelloEvaluator evaluator;
+	private long stop = Long.MAX_VALUE;
+
+	public void setStopTime (long stop) {
+		this.stop = stop;
+	}
+
+	private void stopTimeOfNot() {
+		if (System.nanoTime() >= stop) {
+			throw new TimeIsUpExeption();
+		}
+	}
 
 	public AlphaBeta() {
 		evaluator = new CountingEvaluator();
@@ -42,6 +53,7 @@ public class AlphaBeta implements OthelloAlgorithm {
 
 
 	public OthelloAction evaluate(OthelloPosition pos) {
+		stopTimeOfNot();
 		OthelloAction bestAction = null;
 
 		// Keeps track on the best action from the root (current position).
@@ -52,30 +64,36 @@ public class AlphaBeta implements OthelloAlgorithm {
 			return new OthelloAction("pass");
 		}
 
-		// White to move.
-		if(pos.toMove()){
-			int bestScore = NEG_INFINITY;
-			for (OthelloAction action : possibleActions) {
-				try {
+		// Initiera bästa kända score på roten utifrån vem som ska spela.
+		int bestScore;
+		if (pos.toMove()) {
+			// börja så lågt som möjligt
+			bestScore = NEG_INFINITY;
+		} else {
+			// börja så högt som möjligt
+			bestScore = POS_INFINITY;
+		}
+
+		try {
+			// White to move.
+			if(pos.toMove()){
+				for (OthelloAction action : possibleActions) {
+					stopTimeOfNot();
 					OthelloPosition newPos = pos.makeMove(action);
 
 					int score = minValue(newPos, NEG_INFINITY, POS_INFINITY, searchDepth - 1);
 
-					if(score > bestScore){
+					if(score > bestScore) {
 						bestScore = score;
 						bestAction = action;
 					}
-				} catch (IllegalMoveException e){
-					e.printStackTrace();
 				}
 			}
-		}
 
-		// Black to move.
-		else{
-			int bestScore = POS_INFINITY;
-			for (OthelloAction action : possibleActions) {
-				try {
+			// Black to move.
+			else{
+				for (OthelloAction action : possibleActions) {
+					stopTimeOfNot();
 					OthelloPosition newPos = pos.makeMove(action);
 
 					int score = maxValue(newPos, NEG_INFINITY, POS_INFINITY, searchDepth - 1);
@@ -84,11 +102,21 @@ public class AlphaBeta implements OthelloAlgorithm {
 						bestScore = score;
 						bestAction = action;
 					}
-				}catch (IllegalMoveException e){
-					e.printStackTrace();
 				}
 			}
+		}catch (TimeIsUpExeption e){
+
+		}catch (IllegalMoveException e) {
+			e.printStackTrace();
 		}
+
+		// Om tiden tog slut innan ens ett enda barn blev evaluerat, då ger vi det
+		// första lagliga draget.
+		if (bestAction == null) {
+			return possibleActions.getFirst();
+		}
+
+		// returnera bästa draget.
 		return bestAction;
 	}
 

@@ -26,4 +26,6 @@ public interface OthelloAlgorithm {
 
 	/** Sets the maximum search depth of the algorithm. */
 	public void setSearchDepth(int depth);
+
+	void setStopTime(long stopTIme);
 }

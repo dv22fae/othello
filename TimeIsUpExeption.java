@@ -1,7 +1,7 @@
 public class TimeIsUpExeption extends RuntimeException {
 
     public TimeIsUpExeption() {
-        super();
+        super("Search time limit reached");
     }
 
 }

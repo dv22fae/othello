@@ -60,16 +60,13 @@ public class Othello{
 
 		long timeLimitNanos = (long) (timeLimitSeconds * 1_000_000_000L);
 		long startTime = System.nanoTime();
+		long stopTIme = startTime + timeLimitNanos;
 
 		// Iterative depth search with time limit.
 		int searchDepth = 1;
 
-		//if(args.length > 0){
-			//posString = args[0];
-		//}else{
-			//posString = "WEEEEEEEEEEEEEEEEEEEEEEEEEEEOXEEEEEEXOEEEEEEEEEEEEEEEEEEEEEEEEEEE";
-		//}
-		//System.out.println(posString);
+		OthelloAction bestAction = null;
+
 		pos = new OthelloPosition(posString);
 		//pos.illustrate(); //Only for debugging. The test script has it's own print method
 
@@ -78,15 +75,46 @@ public class Othello{
 
 		while (true) {
 			long timeTaken = System.nanoTime() - startTime;
+
 			if (timeTaken >= timeLimitNanos) {
 				break;
 			}
 
 			algorithm.setSearchDepth(searchDepth);
-			move = algorithm.evaluate(pos);
-			searchDepth++;
+			algorithm.setStopTime(stopTIme);
+
+			// Same to here
+
+			try {
+				OthelloAction possibleBestAction = algorithm.evaluate(pos);
+
+				if (System.nanoTime() < stopTIme) {
+					bestAction = possibleBestAction;
+					searchDepth++;
+				} else {
+					break;
+				}
+			} catch (TimeIsUpExeption e) {
+				break;
+			}
+
+			//move = algorithm.evaluate(pos);
+			//searchDepth++;
 		}
 
-		move.print();
+		// om inget djup hann evalueras.
+		if (bestAction == null) {
+			var moves = pos.getMoves();
+			if (moves.isEmpty()) {
+				new OthelloAction("pass");
+			}
+			else {
+				moves.getFirst();
+			}
+		}
+
+
+		//move.print();
+		bestAction.print();
 	}
 }
