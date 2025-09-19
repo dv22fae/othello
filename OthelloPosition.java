@@ -322,7 +322,6 @@ public class OthelloPosition {
      * Returns the position resulting from making the move <code>action</code> in
      * the current position. Observe that this also changes the player to move next.
      */
-    // Ändras player till andra spelaren efter ett move?
     public OthelloPosition makeMove(OthelloAction action) throws IllegalMoveException {
         // If the action is a pass action.
         if (action.isPassMove()) {
@@ -393,9 +392,6 @@ public class OthelloPosition {
     private void northTurnBricks(int row, int column, OthelloPosition copiedPos, char colour){
         if (checkNorth(row, column)) {
             for (int i = row - 1; i > 0; i--) {
-                /*if (isFree(i, column)) {
-                    break;
-                }*/
                 if (isOwnSquare(i, column)) {
                     break;
                 }
@@ -416,9 +412,6 @@ public class OthelloPosition {
     private void northEastTurnBricks(int row, int column, OthelloPosition copiedPos, char colour) {
         if(checkNorthEast(row, column)){
             for (int i = 1; row - i > 0 && column + i <= BOARD_SIZE; i++) {
-                /*if (isFree(row - i, column + i)) {
-                    break;
-                }*/
                 if (isOwnSquare(row - i, column + i)) {
                     break;
                 }
@@ -439,9 +432,6 @@ public class OthelloPosition {
     private void eastTurnBricks(int row, int column, OthelloPosition copiedPos, char colour){
         if(checkEast(row, column)){
             for (int i = column + 1; i <= BOARD_SIZE; i++) {
-                /*if (isFree(row, i)) {
-                    break;
-                }*/
                 if (isOwnSquare(row, i)) {
                     break;
                 }
@@ -461,9 +451,6 @@ public class OthelloPosition {
     private void southEastTurnBricks(int row, int column, OthelloPosition copiedPos, char colour){
         if(checkSouthEast(row, column)){
             for (int i = 1; row + i <= BOARD_SIZE && column + i <= BOARD_SIZE; i++) {
-                /*if (isFree(row + i, column + i)) {
-                    break;
-                }*/
                 if (isOwnSquare(row + i, column + i)) {
                     break;
                 }
@@ -483,9 +470,6 @@ public class OthelloPosition {
     private void southTurnBricks(int row, int column, OthelloPosition copiedPos, char colour){
         if(checkSouth(row, column)){
             for (int i = row + 1; i <= BOARD_SIZE; i++) {
-                /*if (isFree(i, column)) {
-                    break;
-                }*/
                 if (isOwnSquare(i, column)) {
                     break;
                 }
@@ -506,9 +490,6 @@ public class OthelloPosition {
     private void southWestTurnBricks(int row, int column, OthelloPosition copiedPos, char colour){
         if(checkSouthWest(row, column)){
             for (int i = 1; row + i <= BOARD_SIZE && column - i > 0; i++) {
-                /*if (isFree(row + i, column - i)) {
-                    break;
-                }*/
                 if (isOwnSquare(row + i, column - i)) {
                     break;
                 }
@@ -529,9 +510,6 @@ public class OthelloPosition {
     private void westTurnBricks(int row, int column, OthelloPosition copiedPos, char colour){
         if(checkWest(row, column)){
             for (int i = column - 1; i > 0; i--) {
-                /*if (isFree(row, i)) {
-                    break;
-                }*/
                 if (isOwnSquare(row, i)) {
                     break;
                 }
@@ -551,9 +529,6 @@ public class OthelloPosition {
     private void northWestTurnBricks(int row, int column, OthelloPosition copiedPos, char colour){
         if (checkNorthWest(row, column)) {
             for (int i = 1; row - i > 0 && column - i > 0; i++) {
-                /*if (isFree(row - i, column - i)) {
-                    break;
-                }*/
                 if (isOwnSquare(row - i, column - i)) {
                     break;
                 }
