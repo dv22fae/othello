@@ -85,7 +85,7 @@ public class EarlyGame implements OthelloEvaluator{
 
                 // Two middle rows are pretty good squares.
                 else{
-                    matrixInitializeMiddleRows(i, j);
+                    matrixInitializeMiddleRows(i, j, pos);
                 }
             }
         }
