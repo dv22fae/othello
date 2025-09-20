@@ -3,10 +3,15 @@ import java.util.Timer;
 
 /**
  * This is where you implement the alpha-beta algorithm.
- * See <code>OthelloAlgorithm</code> for detailss
+ * See <code>OthelloAlgorithm</code> for details.
  *
- * @author Henrik Bj&ouml;rklund
+ * Original version by Henrik Björklund, changed by co-authors.
  *
+ * @author Henrik Björklund, original
+ * @author Fredrik Alexandre, co-author
+ * @author Samuel Hagner, co-author
+ *
+ * @version 2.0, 2025-09-24
  */
 public class AlphaBeta implements OthelloAlgorithm {
 
@@ -18,16 +23,36 @@ public class AlphaBeta implements OthelloAlgorithm {
 	protected OthelloEvaluator evaluator;
 	private long stop = Long.MAX_VALUE;
 
+	/**
+	 * Sets a stop time for search.
+	 *
+	 * When the time goes passed this value, the search will
+	 * quite by throwing TimeIsUpExeption.
+	 *
+	 * @param stop, absolute deadline.
+	 */
 	public void setStopTime (long stop) {
 		this.stop = stop;
 	}
 
+	/**
+	 * Checks if the stop time has been reached.
+	 *
+	 * If the current time has passed the stop time,
+	 * it throws TimeIsUpExeption and the seach will end.
+	 *
+	 * @throws TimeIsUpExeption, if stop time is reached.
+	 */
 	private void stopTimeOfNot() {
 		if (System.nanoTime() >= stop) {
 			throw new TimeIsUpExeption();
 		}
 	}
 
+	/**
+	 * Creates an alpha-beta searcher with the default evaluator
+	 * and the default search depth.
+	 */
 	public AlphaBeta() {
 		evaluator = new CountingEvaluator();
 		searchDepth = DefaultDepth;

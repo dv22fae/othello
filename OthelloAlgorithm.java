@@ -7,7 +7,11 @@
  * positions is given by an <code>OthelloEvaluator</code> which is given to the
  * algorithm.
  *
- * @author Henrik Bj&ouml;rklund
+ * @author Henrik Björklund, original
+ * @author Fredrik Alexandre, co-author
+ * @author Samuel Hagner, co-author
+ *
+ * @version 2.0, 2025-09-24
  */
 
 public interface OthelloAlgorithm {

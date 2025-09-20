@@ -4,7 +4,11 @@ import java.util.*;
  * This class is used to represent game positions. It uses a 2-dimensional char
  * array for the board and a Boolean to keep track of which player has the move.
  *
- * @author Henrik Bj&ouml;rklund
+ * @author Henrik Björklund, original
+ * @author Fredrik Alexandre, co-author
+ * @author Samuel Hagner, co-author
+ *
+ * @version 2.0, 2025-09-24
  */
 
 public class OthelloPosition {

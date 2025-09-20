@@ -4,8 +4,12 @@
  * two integers: the row and the column where the player puts the marker. In
  * addition, the <code>OthelloAction</code> has a field where the estimated
  * value of the move can be stored during computations.
- * 
- * @author Henrik Bj&ouml;rklund
+ *
+ * @author Henrik Björklund, original
+ * @author Fredrik Alexandre, co-author
+ * @author Samuel Hagner, co-author
+ *
+ * @version 2.0, 2025-09-24
  */
 
 public class OthelloAction {
