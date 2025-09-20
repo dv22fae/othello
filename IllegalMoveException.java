@@ -1,6 +1,11 @@
 /**
  * This exception is supposed to be thrown when an OthelloPosition is asked to
  * make a move that is not legal in the position.
+ *
+ * @author Henrik Björklund, original
+ * @author Fredrik Alexandre, co-author
+ * @author Samuel Hagner, co-author
+ * @version 2.0, 2025-09-24
  */
 
 public class IllegalMoveException extends Exception {
