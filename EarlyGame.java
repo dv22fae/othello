@@ -418,4 +418,43 @@ public class EarlyGame implements OthelloEvaluator{
             }
         }
     }
+
+
+
+    private void adjustWeightsFromTimeInGame(OthelloPosition pos) {
+        int white = 0;
+        int black = 0;
+        boolean openingOfGame = false;
+        boolean middlegameOfGame = false;
+        boolean endgameOfGame = false;
+
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j <= 8; j++) {
+                if (pos.board[i][j] == 'W') {
+                    white++;
+                } else if (pos.board[i][j] == 'B') {
+                    black++;
+                }
+            }
+        }
+
+        int totalAmountOfBricks = white + black;
+
+        if (totalAmountOfBricks <= 25) {
+            openingOfGame = true;
+        }
+        if (totalAmountOfBricks >= 50 || white >= 40 || black >= 40) {
+            endgameOfGame = true;
+        } else {
+            middlegameOfGame = true;
+        }
+
+        if (openingOfGame) {
+            // troligtvis gör inget
+        } else if (middlegameOfGame) {
+            // justera vikterna möjligtvis
+        } else if (endgameOfGame) {
+            // kanter superviktigt och kanske nåt annat för vikterna
+        }
+    }
 }
