@@ -39,15 +39,16 @@ public class Othello {
 	 */
 	public static void main(String [] args) {
 
-        if (args.length < 2) {
-            System.err.println("Error! This is too few arguments.");
-            System.exit(1);
-        }
-
 		String posString = args[0];
 		OthelloPosition pos;
 		OthelloAlgorithm algorithm;
 		OthelloAction move = null;
+		Double timeLimitSeconds;
+
+        if (args.length < 2) {
+            System.err.println("Error! This is too few arguments.");
+            System.exit(1);
+        }
 
 		if (posString.length() > 65) {
 			System.err.println("Error! String is to long! Should be 65 and got " + posString.length() + ".");
@@ -58,8 +59,6 @@ public class Othello {
 			System.exit(1);
 		}
 
-		Double timeLimitSeconds;
-
 		try {
 			timeLimitSeconds = Double.parseDouble(args[1]);
 		} catch (NumberFormatException e) {
@@ -67,6 +66,7 @@ public class Othello {
 			System.exit(1);
 			return;
 		}
+
 		if (timeLimitSeconds <= 0) {
 			System.err.println("Time limit must be positive number!");
 			System.exit(1);
@@ -96,8 +96,6 @@ public class Othello {
 
 			algorithm.setSearchDepth(searchDepth);
 			algorithm.setStopTime(stopTIme);
-
-			// Same to here
 
 			try {
 				OthelloAction possibleBestAction = algorithm.evaluate(pos);

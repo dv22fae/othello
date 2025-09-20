@@ -31,7 +31,9 @@ public class OthelloPosition {
      */
     protected char[][] board;
 
-    /** Creates a new position and sets all squares to empty. */
+    /**
+     * Creates a new position and sets all squares to empty.
+     */
     public OthelloPosition() {
         board = new char[BOARD_SIZE + 2][BOARD_SIZE + 2];
         for (int i = 0; i < BOARD_SIZE + 2; i++)
