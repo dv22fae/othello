@@ -6,10 +6,20 @@
 public class IllegalMoveException extends Exception {
 	private OthelloAction action;
 
+	/**
+	 * Makes a exception for the given illegal action.
+	 *
+	 * @param a, action that was not legal.
+	 */
 	public IllegalMoveException(OthelloAction a) {
 		action = a;
 	}
 
+	/**
+	 * Returns action that caused this exception.
+	 *
+	 * @return illegal action.
+	 */
 	public OthelloAction getAction() {
 		return action;
 	}
