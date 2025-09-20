@@ -19,17 +19,31 @@ public interface OthelloAlgorithm {
 	/**
 	 * Sets the <code>OthelloEvaluator</code> the algorithm is to use for
 	 * heuristic evaluation.
+	 *
+	 * @param evaluator, evaluator to use.
 	 */
 	public void setEvaluator(OthelloEvaluator evaluator);
 
 	/**
 	 * Returns the <code>OthelloAction</code> the algorithm considers to be the
 	 * best move.
+	 *
+	 * @param position, position to evaluate.
+	 * @return a OthelloAction.
 	 */
 	public OthelloAction evaluate(OthelloPosition position);
 
-	/** Sets the maximum search depth of the algorithm. */
+	/**
+	 * Sets the maximum search depth of the algorithm.
+	 *
+	 * @param depth, max depth to search.
+	 */
 	public void setSearchDepth(int depth);
 
+	/**
+	 * Sets complete stoptime for the search.
+	 *
+	 * @param stopTIme, complete stoptime in nanoseconds.
+	 */
 	void setStopTime(long stopTIme);
 }
