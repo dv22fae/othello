@@ -19,18 +19,27 @@ public class OthelloAction {
      */
     protected int row = -1;
 
-    /** The column where the marker is placed. */
+    /**
+     * The column where the marker is placed.
+     */
     protected int column = -1;
 
-    /** The estimated value of the move. */
+    /**
+     * The estimated value of the move.
+     */
     protected int value = 0;
 
-    /** True if the player has to pass, i.e., if there is no legal move. */
+    /**
+     * True if the player has to pass, i.e., if there is no legal move.
+     */
     protected boolean pass = false;
 
     /**
      * Creates a new <code>OthelloAction</code> with row <code>r</code>, column
      * <code>c</code>, and value 0.
+     *
+     * @param r, row.
+     * @param c, column.
      */
     public OthelloAction(int r, int c) {
         row = r;
@@ -38,6 +47,13 @@ public class OthelloAction {
         value = 0;
     }
 
+    /**
+     * Creates a move with the given row/column and pass flag.
+     *
+     * @param r, row.
+     * @param c, column.
+     * @param p true for a pass move, otherwise false.
+     */
     public OthelloAction(int r, int c, boolean p) {
         row = r;
         column = c;
@@ -45,6 +61,11 @@ public class OthelloAction {
         pass = p;
     }
 
+    /**
+     * Creates a move from a string.
+     *
+     * @param s, string to parse.
+     */
     public OthelloAction(String s) {
         if (s.equals("pass")) {
             row = 0;
@@ -58,28 +79,42 @@ public class OthelloAction {
         }
     }
 
-    /** Sets the estimated value of the move. */
+    /**
+     * Sets the estimated value of the move.
+     *
+     * @param v, value to store.
+     */
     public void setValue(int v) {
         value = v;
     }
 
-    /** Returns the estimated value of the move. */
+    /**
+     * Returns the estimated value of the move.
+     */
     public int getValue() {
         return value;
     }
 
-    /** Sets the column where the marker is to be placed. */
+    /**
+     * Sets the column where the marker is to be placed.
+     *
+     * @param c, column.
+     */
     public void setColumn(int c) {
         column = c;
     }
 
-    /** Returns the column where the marker is to be placed. */
+    /**
+     * Returns the column where the marker is to be placed.
+     */
     public int getColumn() {
         return column;
     }
 
     /**
      * Sets the row where the marker is to be placed.
+     *
+     * @param r, row.
      */
     public void setRow(int r) {
         row = r;
@@ -95,6 +130,8 @@ public class OthelloAction {
     /**
      * Sets the boolean that indicates whether this is a pass move. This should only
      * be true if there are no legal moves.
+     *
+     * @param b, true if it is a pass move, otherwise false.
      */
     public void setPassMove(boolean b) {
         pass = b;
@@ -102,12 +139,15 @@ public class OthelloAction {
 
     /**
      * Returns true if this is a pass move, indicating that the player has no legal
-     * moves. Otherwise returns false.
+     * moves. O therwise returns false.
      */
     public boolean isPassMove() {
         return pass;
     }
 
+    /**
+     * Prints this action to standard output.
+     */
     public void print() {
         if (pass) {
             System.out.println("pass");
