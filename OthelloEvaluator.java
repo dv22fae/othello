@@ -17,6 +17,9 @@ public interface OthelloEvaluator {
 
 	/**
 	 * Reterns an integer, representing a heuristic evaluation of the postion.
+	 *
+	 * @param position, position to evaluate.
+	 * @return score where higher is better for White and lower is better for Black.
 	 */
 	public int evaluate(OthelloPosition position);
 
