@@ -50,7 +50,7 @@ public class AlphaBeta implements OthelloAlgorithm {
 	}
 
 	/**
-	 * Creates an alpha-beta searcher with the default evaluator
+	 * Constructor that makes a alphaBeta with default evaluator
 	 * and the default search depth.
 	 */
 	public AlphaBeta() {
@@ -58,25 +58,56 @@ public class AlphaBeta implements OthelloAlgorithm {
 		searchDepth = DefaultDepth;
 	}
 
+	/**
+	 * Constructor that makes a AlphaBeta with a given evaluator
+	 * and the default search depth.
+	 *
+	 * @param eval, evaluator used to score positions.
+	 */
 	public AlphaBeta(OthelloEvaluator eval) {
 		evaluator = eval;
 		searchDepth = DefaultDepth;
 	}
 
+	/**
+	 * Constructor that makes a AlphaBeta with a given evaluator
+	 * and with a given search depth.
+	 *
+	 * @param eval, evaluator used to score positions.
+	 * @param depth, evaluator used to score positions.
+	 */
 	public AlphaBeta(OthelloEvaluator eval, int depth) {
 		evaluator = eval;
 		searchDepth = depth;
 	}
 
+	/**
+	 * Sets evaluator to be used for scoring positions.
+	 *
+	 * @param eval, given to be used evaluator.
+	 */
 	public void setEvaluator(OthelloEvaluator eval) {
 		evaluator = eval;
 	}
 
+	/**
+	 * Sets evaluator to be used for scoring positions.
+	 *
+	 * @param depth, given to be used evaluator.
+	 */
 	public void setSearchDepth(int depth) {
 		searchDepth = depth;
 	}
 
-
+	/**
+	 * Picks the best move from the given position by alphaBeta search.
+	 *
+	 * If there is no legal moves the method will return pass.
+	 * If time runs out before any better move is evaluated it returns the first legal move.
+	 *
+	 * @param pos, current game position.
+	 * @return best action.
+	 */
 	public OthelloAction evaluate(OthelloPosition pos) {
 		stopTimeOfNot();
 		OthelloAction bestAction = null;
@@ -145,12 +176,24 @@ public class AlphaBeta implements OthelloAlgorithm {
 		return bestAction;
 	}
 
-	// NY
-	private int maxValue(OthelloPosition pos, int alpha, int beta, int depth){
+	/**
+	 * Part of alfaBeta for the maximizing player, white player.
+	 *
+	 * Looks forward and hands back the highest score found.
+	 * The method also uses alpha and beta to cut branches
+	 * that will not make a better result.
+	 *
+	 * @param pos, position to evaluate from.
+	 * @param alpha, current best lower bound.
+	 * @param beta, current best upper bound.
+	 * @param depth, depth to search.
+	 * @return score for white player.
+	 */
+	private int maxValue(OthelloPosition pos, int alpha, int beta, int depth) {
 		LinkedList<OthelloAction> possibleActions = pos.getMoves();
 
 		// We stop at the bottom of the tree or if no possible move is available.
-		if(depth == 0 || possibleActions.isEmpty()){
+		if(depth == 0 || possibleActions.isEmpty()) {
 			return evaluator.evaluate(pos);
 		}
 
@@ -168,7 +211,7 @@ public class AlphaBeta implements OthelloAlgorithm {
 				alpha = Math.max(alpha, maxVal);
 
 				// If alfa is greater or equal to beta we can prune.
-				if(alpha >= beta){
+				if (alpha >= beta) {
 					break;
 				}
 			} catch (IllegalMoveException e) {
@@ -179,19 +222,31 @@ public class AlphaBeta implements OthelloAlgorithm {
 		return maxVal;
 	}
 
-	// NY
+	/**
+	 * Part of alfaBeta for the minimizing player, black player.
+	 *
+	 * Looks forward and hands back the lowest score found.
+	 * The method also uses alpha and beta to cut branches
+	 * that will not make a better result.
+	 *
+	 * @param pos, position to evaluate from.
+	 * @param alpha, current best lower bound.
+	 * @param beta, current best upper bound.
+	 * @param depth, depth to search.
+	 * @return score for black player.
+	 */
 	private int minValue(OthelloPosition pos, int alpha, int beta, int depth){
 		LinkedList<OthelloAction> possibleActions = pos.getMoves();
 
 		// We stop and evaluate at the bottom of the tree or if no possible move is available.
-		if(depth == 0 || possibleActions.isEmpty()){
+		if(depth == 0 || possibleActions.isEmpty()) {
 			return evaluator.evaluate(pos);
 		}
 
 		int minVal = POS_INFINITY;
 
 		// For each possible action.
-		for(OthelloAction action : possibleActions){
+		for(OthelloAction action : possibleActions) {
 			try {
 				OthelloPosition newPos = pos.makeMove(action);
 
@@ -202,7 +257,7 @@ public class AlphaBeta implements OthelloAlgorithm {
 				beta = Math.min(beta, minVal);
 
 				// If alfa is greater or equal to beta we can prune.
-				if(alpha >= beta){
+				if(alpha >= beta) {
 					break;
 				}
 			} catch (IllegalMoveException e) {
