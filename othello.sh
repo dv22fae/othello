@@ -6,6 +6,7 @@
 # usage: bash othello <position> <time_limit> <do_compile>
 # 
 # Author: Ola Ringdahl
+# Changed by: Fredrik Alexandre and Samuel Hagner
 
 position=$1
 time_limit=$2

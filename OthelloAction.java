@@ -14,7 +14,9 @@
 
 public class OthelloAction {
 
-    /** The row where the marker is placed. */
+    /**
+     * The row where the marker is placed.
+     */
     protected int row = -1;
 
     /** The column where the marker is placed. */
@@ -76,12 +78,16 @@ public class OthelloAction {
         return column;
     }
 
-    /** Sets the row where the marker is to be placed. */
+    /**
+     * Sets the row where the marker is to be placed.
+     */
     public void setRow(int r) {
         row = r;
     }
 
-    /** Returns the row where the marker is to be placed. */
+    /**
+     * Returns the row where the marker is to be placed.
+     */
     public int getRow() {
         return row;
     }
