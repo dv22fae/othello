@@ -13,10 +13,14 @@ import java.util.*;
 
 public class OthelloPosition {
 
-    /** For a normal Othello game, BOARD_SIZE is 8. */
+    /**
+     * For a normal Othello game, BOARD_SIZE is 8.
+     */
     protected static final int BOARD_SIZE = 8;
 
-    /** True if the first player (white) has the move. */
+    /**
+     * True if the first player (white) has the move.
+     */
     protected boolean maxPlayer;
 
     /**
@@ -42,6 +46,11 @@ public class OthelloPosition {
 
     }
 
+    /**
+     * Creates position from a 65 character string.
+     *
+     * @param s, position string.
+     */
     public OthelloPosition(String s) {
         if (s.length() != 65) {
             board = new char[BOARD_SIZE + 2][BOARD_SIZE + 2];
@@ -87,6 +96,8 @@ public class OthelloPosition {
      * Returns a linked list of <code>OthelloAction</code> representing all possible
      * moves in the position. If the list is empty, there are no legal moves for the
      * player who has the move.
+     *
+     * @return list of OthelloAction, empty if no legal move exists.
      */
     public LinkedList<OthelloAction> getMoves() {
         boolean[][] candidates = new boolean[BOARD_SIZE][BOARD_SIZE];
@@ -103,7 +114,11 @@ public class OthelloPosition {
     }
 
     /**
-     * Check if it is possible to do a move from this position
+     * Check if it is possible to do a move from this position.
+     *
+     * @param row, row
+     * @param column, column.
+     * @return true if the move is legal, else false.
      */
     private boolean isMove(int row, int column) {
         if (checkNorth(row, column))
@@ -127,7 +142,11 @@ public class OthelloPosition {
     }
 
     /**
-     * Check if it is possible to do a move to the north from this position
+     * Check if it is possible to do a move to the north from this position.
+     *
+     * @param row, row.
+     * @param column, column.
+     * @return true or false.
      */
     private boolean checkNorth(int row, int column) {
         if (!isOpponentSquare(row - 1, column))
@@ -142,7 +161,11 @@ public class OthelloPosition {
     }
 
     /**
-     * Check if it is possible to do a move to the east from this position
+     * Check if it is possible to do a move to the east from this position.
+     *
+     * @param row, row.
+     * @param column, column.
+     * @return true or false.
      */
     private boolean checkEast(int row, int column) {
         if (!isOpponentSquare(row, column + 1))
@@ -157,7 +180,11 @@ public class OthelloPosition {
     }
 
     /**
-     * Check if it is possible to do a move to the south from this position
+     * Check if it is possible to do a move to the south from this position.
+     *
+     * @param row, row.
+     * @param column, column.
+     * @return true or false.
      */
     private boolean checkSouth(int row, int column) {
         if (!isOpponentSquare(row + 1, column))
@@ -172,7 +199,11 @@ public class OthelloPosition {
     }
 
     /**
-     * Check if it is possible to do a move to the west from this position
+     * Check if it is possible to do a move to the west from this position.
+     *
+     * @param row, row.
+     * @param column, column.
+     * @return true or false.
      */
     private boolean checkWest(int row, int column) {
         if (!isOpponentSquare(row, column - 1))
@@ -187,7 +218,11 @@ public class OthelloPosition {
     }
 
     /**
-     * Check if it is possible to do a move to the northest from this position
+     * Check if it is possible to do a move to the northest from this position.
+     *
+     * @param row, row.
+     * @param column, column.
+     * @return true or false.
      */
     private boolean checkNorthEast(int row, int column) {
         if (!isOpponentSquare(row - 1, column + 1))
@@ -202,7 +237,11 @@ public class OthelloPosition {
     }
 
     /**
-     * Check if it is possible to do a move to the southeast from this position
+     * Check if it is possible to do a move to the southeast from this position.
+     *
+     * @param row, row.
+     * @param column, column.
+     * @return true or false.
      */
     private boolean checkSouthEast(int row, int column) {
         if (!isOpponentSquare(row + 1, column + 1))
@@ -217,7 +256,11 @@ public class OthelloPosition {
     }
 
     /**
-     * Check if it is possible to do a move to the soutwest from this position
+     * Check if it is possible to do a move to the soutwest from this position.
+     *
+     * @param row, row.
+     * @param column, column.
+     * @return true or false.
      */
     private boolean checkSouthWest(int row, int column) {
         if (!isOpponentSquare(row + 1, column - 1))
@@ -232,7 +275,11 @@ public class OthelloPosition {
     }
 
     /**
-     * Check if it is possible to do a move to the northwest from this position
+     * Check if it is possible to do a move to the northwest from this position.
+     *
+     * @param row, row.
+     * @param column, column.
+     * @return true or false.
      */
     private boolean checkNorthWest(int row, int column) {
         if (!isOpponentSquare(row - 1, column - 1))
@@ -247,7 +294,11 @@ public class OthelloPosition {
     }
 
     /**
-     * Check if the position is occupied by the opponent
+     * Check if the position is occupied by the opponent.
+     *
+     * @param row, row.
+     * @param column, column.
+     * @return true or false.
      */
     public boolean isOpponentSquare(int row, int column) {
         if (maxPlayer && (board[row][column] == 'B'))
@@ -259,6 +310,10 @@ public class OthelloPosition {
 
     /**
      * Check if the position is occupied by the player
+     *
+     * @param row, row.
+     * @param column, column.
+     * @return true or false.
      */
     public boolean isOwnSquare(int row, int column) {
         if (!maxPlayer && (board[row][column] == 'B'))
@@ -269,10 +324,11 @@ public class OthelloPosition {
     }
 
     /**
-     * Check if the position is a candidate for a move (not empty and has a
-     * neighbour)
+     * Check if the position is a candidate for a move (not empty and has a neighbour)
      *
-     * @return true if it is a candidate
+     * @param row, row.
+     * @param column, column.
+     * @return true or false.
      */
     private boolean isCandidate(int row, int column) {
         if (!isFree(row, column))
@@ -285,7 +341,9 @@ public class OthelloPosition {
     /**
      * Check if the position has any non-empty squares
      *
-     * @return true if is has any neighbours
+     * @param row, row.
+     * @param column, column.
+     * @return true or false.
      */
     private boolean hasNeighbor(int row, int column) {
         if (!isFree(row - 1, column))
@@ -308,7 +366,11 @@ public class OthelloPosition {
     }
 
     /**
-     * Check if the position is free/empty
+     * Check if the position is free/empty.
+     *
+     * @param row, row.
+     * @param column, column.
+     * @return true or false.
      */
     private boolean isFree(int row, int column) {
         if (board[row][column] == 'E')
@@ -318,7 +380,9 @@ public class OthelloPosition {
 
     /* toMove */
 
-    /** Returns true if the first player (white) has the move, otherwise false. */
+    /**
+     * Returns true if the first player (white) has the move, otherwise false.
+     */
     public boolean toMove() {
         return maxPlayer;
     }
@@ -327,6 +391,10 @@ public class OthelloPosition {
     /**
      * Returns the position resulting from making the move <code>action</code> in
      * the current position. Observe that this also changes the player to move next.
+     *
+     * @param action, move to make.
+     * @return a new OthelloPosition after the move.
+     * @throws IllegalMoveException
      */
     public OthelloPosition makeMove(OthelloAction action) throws IllegalMoveException {
         // If the action is a pass action.
@@ -374,6 +442,14 @@ public class OthelloPosition {
         return currentPosCloned;
     }
 
+    /**
+     * Flips taken squers in all eight directions from (row, column).
+     *
+     * @param row, row.
+     * @param column, column.
+     * @param copiedPos a cloned board to change.
+     * @param colour, W or B for stone that is just placed.
+     */
     private void turnOverBricksAllDirections(int row, int column, OthelloPosition copiedPos, char colour) {
         northTurnBricks(row, column, copiedPos, colour);
         northEastTurnBricks(row, column, copiedPos, colour);
@@ -544,7 +620,14 @@ public class OthelloPosition {
     }
 
 
-
+    /**
+     * Validates that row and column is inside the board and empty.
+     *
+     * @param row, row.
+     * @param column, column.
+     * @param action, action being validated.
+     * @throws IllegalMoveException
+     */
     private void checkSoInsideBoard(int row, int column, OthelloAction action) throws IllegalMoveException {
         if (row < 1 || row > BOARD_SIZE)
         {
@@ -560,6 +643,11 @@ public class OthelloPosition {
         }
     }
 
+    /**
+     * Handles possition when it should be passed, switches the side to move.
+     *
+     * @return new position with the turn handed over.
+     */
     private OthelloPosition moveShouldBePassed() {
         OthelloPosition thisPosition = this.clone();
         thisPosition.maxPlayer = !this.maxPlayer;
@@ -610,6 +698,9 @@ public class OthelloPosition {
         System.out.println("|\n");
     }
 
+    /**
+     * Prints a horizontal borderline.
+     */
     private void printHorizontalBorder() {
         System.out.print("---");
         for (int i = 1; i <= BOARD_SIZE; i++) {
@@ -618,6 +709,11 @@ public class OthelloPosition {
         System.out.println("|---");
     }
 
+    /**
+     * Makes a string out of the position to a 65 character string.
+     *
+     * @return position string.
+     */
     public String toString() {
         String s = "";
         char c, d;
