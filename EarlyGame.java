@@ -1,17 +1,7 @@
 import java.util.LinkedList;
 
-public class EarlyGame implements OthelloEvaluator{
-    private static final int NUM_WHITE_SQUARES_WEIGHT = 10;
-    private static final int CONTROL_MIDDLE_WEIGHT = 25;
-    private static final int NUM_CORNER_NEIGHBOURS_WEIGHT = -20;
-    private static final int NUM_CORNERS_WEIGHT = 50;
-    private static final int NUM_GOOD_EDGE_SQUARES_WEIGHT = 30;
 
-    private int num_bricks = 0;
-
-    private int[][] weightedMatrix;
-
-    /* Ideer, lägg weightedMatrix i Othelloposition och initialize den en gång i Othello.
+/* Ideer, lägg weightedMatrix i Othelloposition och initialize den en gång i Othello.
     Sedan använder man pos.weightedMatrix här så sliper man skapa den på nytt varje evaluering.
 
     Man kan också bygga in antalet drag man har tillgång till vid varje position för att det är bra
@@ -24,7 +14,48 @@ public class EarlyGame implements OthelloEvaluator{
 
     Kanske ta bort middle game och ha endast early game och lategame?
      */
-    // Ska den endast evaluera white 'W' till positiv, eller svart med eftersom man spelar som svart i script?
+// Ska den endast evaluera white 'W' till positiv, eller svart med eftersom man spelar som svart i script?
+
+
+
+
+/**
+ * Early game heuristic evaluator for Othello.
+ *
+ * Scores a position by summing a weight distrobution inspired by "xxxx" for every occupied cell.
+ *
+ * Positive weights for strong squares,
+ * negative weights for risky and lower priority squares.
+ *
+ * Reference:
+ *
+ * @author Fredrik Alexandre
+ * @author Samuel Hagner
+ * @version 1.0, 2025-09-24
+ */
+
+public class EarlyGame implements OthelloEvaluator{
+    private static final int NUM_WHITE_SQUARES_WEIGHT = 10;
+    private static final int CONTROL_MIDDLE_WEIGHT = 25;
+    private static final int NUM_CORNER_NEIGHBOURS_WEIGHT = -20;
+    private static final int NUM_CORNERS_WEIGHT = 50;
+    private static final int NUM_GOOD_EDGE_SQUARES_WEIGHT = 30;
+
+    private int num_bricks = 0;
+
+    /**
+     * Matrix to handle weight of each position in the matrix.
+     */
+    private int[][] weightedMatrix;
+
+    /**
+     * Evaluates the given position.
+     *
+     * Builds the weight matrix and returns a score.
+     *
+     * @param pos, position to evaluate.
+     * @return integer score, higher is better for White, lower is better for Black.
+     */
     @Override
     public int evaluate(OthelloPosition pos) {
         //int numPossibleMoves = 0;
@@ -51,9 +82,13 @@ public class EarlyGame implements OthelloEvaluator{
         return totalWeightWhite - totalWeightBlack;
     }
 
-
-
-    // Loads the matrix with weights corresponding to how good squares are to hold.
+    /**
+     * Builds the weight matrix (stored as 9x9 for 1-based indexing).
+     *
+     * Loads the matrix with weights corresponding to how good squares are to hold.
+     *
+     * @param pos, position used for to check around corners and edges.
+     */
     private void initializeWeightedMatrix(OthelloPosition pos){
         weightedMatrix = new int[9][9];
 
@@ -83,6 +118,13 @@ public class EarlyGame implements OthelloEvaluator{
         }
     }
 
+    /**
+     * Assigns weights for the first, row 1, and last, row 8, rows.
+     *
+     * @param i, row.
+     * @param j, column.
+     * @param pos, position used to see which color has a squere.
+     */
     private void matrixInitializeFirstAndLastRow(int i, int j, OthelloPosition pos){
         switch (j){
             // Corners are very good squares
@@ -143,6 +185,13 @@ public class EarlyGame implements OthelloEvaluator{
         }
     }
 
+    /**
+     * Assigns weights for row 2, and last, row 7, rows.
+     *
+     * @param i, row.
+     * @param j, column.
+     * @param pos, position used to see which color has a squere.
+     */
     private void matrixInitializeSecondAndSecondLastRow(int i, int j, OthelloPosition pos){
         // Corner neighbours are bad because it can allow opponent to take a corner.
         if(i == 2){
@@ -234,7 +283,13 @@ public class EarlyGame implements OthelloEvaluator{
         }
     }
 
-
+    /**
+     * Assigns weights for row 3, and row 6, rows.
+     *
+     * @param i, row.
+     * @param j, column.
+     * @param pos, position used to see which color has a squere.
+     */
     private void matrixInitializeThirdAndThirdLastRow(int i, int j, OthelloPosition pos){
         if(i == 3){
             switch (j){
@@ -316,6 +371,13 @@ public class EarlyGame implements OthelloEvaluator{
         }
     }
 
+    /**
+     * Assigns weights for row 4, and row 5, rows.
+     *
+     * @param i, row.
+     * @param j, column.
+     * @param pos, position used to see which color has a squere.
+     */
     private void matrixInitializeMiddleRows(int i, int j, OthelloPosition pos){
         switch (j){
             // Edge squares are good.
@@ -346,6 +408,9 @@ public class EarlyGame implements OthelloEvaluator{
         }
     }
 
+    /**
+     * For debugging.
+     */
     private void weightedMatrixPrint(){
         for(int i = 1; i <= 8; i++){
             for(int j = 1; j <= 8; j++){

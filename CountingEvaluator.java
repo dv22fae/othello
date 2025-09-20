@@ -2,6 +2,10 @@
  * A simple evaluator that just counts the number of black and white squares
  * 
  * @author Henrik Bj&ouml;rklund
+ * @author Henrik Björklund, original
+ * @author Fredrik Alexandre, co-author
+ * @author Samuel Hagner, co-author
+ * @version 2.0, 2025-09-24
  */
 public class CountingEvaluator implements OthelloEvaluator {
 
