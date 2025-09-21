@@ -53,6 +53,15 @@ public class Othello {
 		bestAction.print();
 	}
 
+	/**
+	 * Reads and validates position from the command line.
+	 *
+	 * It ensures that the user gave atleast two arguments and that the position string that is also
+	 * gotten from the commandline has 65 characters.
+	 *
+	 * @param args, commandline arguments.
+	 * @return hands back the validated string that represents the position.
+	 */
 	private static String getAndValidatePosition(String[] args) {
 		if (args.length < 2) {
 			System.err.println("Error! This is too few arguments.");
@@ -71,6 +80,12 @@ public class Othello {
 		return posString;
 	}
 
+	/**
+	 * Gets and validates the time limit.
+	 *
+	 * @param args, command line arguments.
+	 * @return the time limit that the user defined in seconds.
+	 */
 	private static double getAndValidateTime(String[] args) {
 		double timeLimitSeconds;
 		try {
@@ -86,11 +101,23 @@ public class Othello {
 		return timeLimitSeconds;
 	}
 
+	/**
+	 * Prints a error message and also sets the exit code to 1 that exits the program.
+	 *
+	 * @param errorText, text that says what went wrong.
+	 * @param exitCode, sets the exit status.
+	 */
 	private static void printErrorAndSetExit(String errorText, int exitCode) {
 		System.err.println(errorText);
 		System.exit(exitCode);
 	}
 
+	/**
+	 * If no move was evalueted because no depth finished before time limit.
+	 *
+	 * @param position, the current position.
+	 * @return first legal move or pass.
+	 */
 	private static OthelloAction ifNoMoveWasGotten(OthelloPosition position) {
 		var moves = position.getMoves();
 
@@ -101,11 +128,25 @@ public class Othello {
 		}
 	}
 
+	/**
+	 * Computes real stop time in nanoseconds.
+	 *
+	 * @param timeLimitSeconds, time limit in seconds.
+	 * @return time where the time limit will be reached.
+	 */
 	private static long stopTimeInNanos(double timeLimitSeconds) {
 		long stopTimeInNanos = System.nanoTime() + (long) (timeLimitSeconds * ONE_SECOND_OF_NANOS);
 		return stopTimeInNanos;
 	}
 
+	/**
+	 * Runs Iterative Deepening Search with alphaBeta the time limit is reached.
+	 *
+	 * @param position, position to evaluate.
+	 * @param algorithm, the algoritm for heuristics to use.
+	 * @param stopTimeNanos the time limit.
+	 * @return the best action from deepest search that was finnished.
+	 */
 	private static OthelloAction iterativeDeepeningSearch(OthelloPosition position, OthelloAlgorithm algorithm,
 														  long stopTimeNanos) {
 		OthelloAction bestAction = null;
