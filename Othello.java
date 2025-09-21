@@ -30,69 +30,28 @@ public class Othello {
 	private static final int LENGTH_OF_POSITION = 65;
 	private static final long ONE_SECOND_OF_NANOS = 1_000_000_000L;
 
-	/**
-	 * Main method
-	 *
-	 * It validates the input arguments, builds position, and runs
-	 * alphaBeta search with iterative deepening up to the time limit.
-	 * When time is up a TimeIsUpExeption is thrown.
-	 *
-	 * @param args args[0] is the 65 character position string,
-	 * 						args[1] is the time limit in seconds.
-	 */
 	public static void main(String [] args) {
 
 		// Get and validate input.
 		String posString = getAndValidatePosition(args);
 		double timeLimitSeconds = getAndValidateTime(args);
 
-		OthelloPosition pos;
-		OthelloAlgorithm algorithm;
-		OthelloAction move = null;
+		// Define and make position and algorithm.
+		OthelloPosition pos = new OthelloPosition(posString);
+		OthelloAlgorithm algorithm = new AlphaBeta(new EarlyGame());
 
-		long timeLimitNanos = (long) (timeLimitSeconds * ONE_SECOND_OF_NANOS);
-		long startTime = System.nanoTime();
-		long stopTIme = startTime + timeLimitNanos;
+		// The time when the time limit has ended.
+		long stopTimeNanos = stopTimeInNanos(timeLimitSeconds);
 
-		// Iterative depth search with time limit.
-		int searchDepth = 1;
-
-		OthelloAction bestAction = null;
-
-		pos = new OthelloPosition(posString);
-
-		// Which evaluator, heuristics, should be used.
-		algorithm = new AlphaBeta(new EarlyGame());
-
-		while (true) {
-			long timeTaken = System.nanoTime() - startTime;
-
-			if (timeTaken >= timeLimitNanos) {
-				break;
-			}
-
-			algorithm.setSearchDepth(searchDepth);
-			algorithm.setStopTime(stopTIme);
-
-			try {
-				OthelloAction possibleBestAction = algorithm.evaluate(pos);
-
-				if (System.nanoTime() < stopTIme) {
-					bestAction = possibleBestAction;
-					searchDepth++;
-				} else {
-					break;
-				}
-			} catch (TimeIsUpExeption e) {
-				break;
-			}
-		}
+		// Running the iterative deepening seach until the time limit.
+		OthelloAction bestAction = iterativeDeepeningSearch(pos, algorithm, stopTimeNanos);
 
 		// If no depth was evaluated completely, time ran out.
 		if (bestAction == null) {
 			bestAction = ifNoMoveWasGotten(pos);
 		}
 
+		// Print the position.
 		bestAction.print();
 	}
 
@@ -142,5 +101,37 @@ public class Othello {
 		} else {
 			return moves.getFirst();
 		}
+	}
+
+	private static long stopTimeInNanos(double timeLimitSeconds) {
+		long stopTimeInNanos = System.nanoTime() + (long) (timeLimitSeconds * ONE_SECOND_OF_NANOS);
+		return stopTimeInNanos;
+	}
+
+	private static OthelloAction iterativeDeepeningSearch(OthelloPosition pos, OthelloAlgorithm algorithm,
+														  long stopTimeNanos) {
+		OthelloAction bestAction = null;
+		long startTime = System.nanoTime();
+		int searchDepth = 1;
+
+		while (startTime < stopTimeNanos) {
+			algorithm.setSearchDepth(searchDepth);
+			algorithm.setStopTime(stopTimeNanos);
+
+			try {
+				OthelloAction possibleBestAction = algorithm.evaluate(pos);
+
+				if (System.nanoTime() < stopTimeNanos) {
+					bestAction = possibleBestAction;
+					searchDepth++;
+				} else {
+					break;
+				}
+			} catch (TimeIsUpExeption e) {
+				break;
+			}
+		}
+
+		return bestAction;
 	}
 }
