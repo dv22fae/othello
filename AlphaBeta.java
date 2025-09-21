@@ -120,26 +120,19 @@ public class AlphaBeta implements OthelloAlgorithm {
 			return new OthelloAction("pass");
 		}
 
-		// Initiera bästa kända score på roten utifrån vem som ska spela.
-		int bestScore;
-		if (pos.toMove()) {
-			// börja så lågt som möjligt
-			bestScore = NEG_INFINITY;
-		} else {
-			// börja så högt som möjligt
-			bestScore = POS_INFINITY;
-		}
+		// Initiate the best score at the beginning from which color is to play.
+		int bestScore = bestScoreAtstart(pos);
 
 		try {
 			// White to move.
-			if(pos.toMove()){
+			if (pos.toMove()) {
 				for (OthelloAction action : possibleActions) {
 					stopTimeOfNot();
 					OthelloPosition newPos = pos.makeMove(action);
 
 					int score = minValue(newPos, NEG_INFINITY, POS_INFINITY, searchDepth - 1);
 
-					if(score > bestScore) {
+					if (score > bestScore) {
 						bestScore = score;
 						bestAction = action;
 					}
@@ -147,32 +140,31 @@ public class AlphaBeta implements OthelloAlgorithm {
 			}
 
 			// Black to move.
-			else{
+			else {
 				for (OthelloAction action : possibleActions) {
 					stopTimeOfNot();
 					OthelloPosition newPos = pos.makeMove(action);
 
 					int score = maxValue(newPos, NEG_INFINITY, POS_INFINITY, searchDepth - 1);
 
-					if(score < bestScore){
+					if (score < bestScore) {
 						bestScore = score;
 						bestAction = action;
 					}
 				}
 			}
-		}catch (TimeIsUpExeption e){
-
-		}catch (IllegalMoveException e) {
-			e.printStackTrace();
+		} catch (TimeIsUpExeption e) {
+			System.err.println("Time limit is up");
+		} catch (IllegalMoveException e) {
+			System.err.println("Skipping illegal move");
 		}
 
-		// Om tiden tog slut innan ens ett enda barn blev evaluerat, då ger vi det
-		// första lagliga draget.
+		// If the time ran out before anything could be evaluated.
 		if (bestAction == null) {
 			return possibleActions.getFirst();
 		}
 
-		// returnera bästa draget.
+		// Return the best move.
 		return bestAction;
 	}
 
@@ -235,7 +227,7 @@ public class AlphaBeta implements OthelloAlgorithm {
 	 * @param depth, depth to search.
 	 * @return score for black player.
 	 */
-	private int minValue(OthelloPosition pos, int alpha, int beta, int depth){
+	private int minValue(OthelloPosition pos, int alpha, int beta, int depth) {
 		LinkedList<OthelloAction> possibleActions = pos.getMoves();
 
 		// We stop and evaluate at the bottom of the tree or if no possible move is available.
@@ -267,5 +259,21 @@ public class AlphaBeta implements OthelloAlgorithm {
 
 		}
 		return minVal;
+	}
+
+	/**
+	 * Initial best score at the root:
+	 *
+	 * @param pos, position
+	 * @return positive or negative infinity.
+	 */
+	private int bestScoreAtstart(OthelloPosition pos) {
+		if (pos.toMove()) {
+			// Begin so low as possible.
+			return NEG_INFINITY;
+		} else {
+			// Begin so high as possible.
+			return POS_INFINITY;
+		}
 	}
 }
