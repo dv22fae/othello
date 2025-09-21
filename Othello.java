@@ -1,5 +1,3 @@
-import java.awt.desktop.SystemEventListener;
-import java.util.Timer;
 
 /**
  * Main entry point for the Othello game search.
