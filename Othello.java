@@ -106,7 +106,7 @@ public class Othello {
 		return stopTimeInNanos;
 	}
 
-	private static OthelloAction iterativeDeepeningSearch(OthelloPosition pos, OthelloAlgorithm algorithm,
+	private static OthelloAction iterativeDeepeningSearch(OthelloPosition position, OthelloAlgorithm algorithm,
 														  long stopTimeNanos) {
 		OthelloAction bestAction = null;
 		long startTime = System.nanoTime();
@@ -117,7 +117,7 @@ public class Othello {
 			algorithm.setStopTime(stopTimeNanos);
 
 			try {
-				OthelloAction possibleBestAction = algorithm.evaluate(pos);
+				OthelloAction possibleBestAction = algorithm.evaluate(position);
 
 				if (System.nanoTime() < stopTimeNanos) {
 					bestAction = possibleBestAction;
