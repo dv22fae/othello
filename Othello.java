@@ -43,7 +43,7 @@ public class Othello {
 		// The time when the time limit has ended.
 		long stopTimeNanos = stopTimeInNanos(timeLimitSeconds);
 
-		// Running the iterative deepening seach until the time limit.
+		// Running the iterative deepening search until the time limit.
 		OthelloAction bestAction = iterativeDeepeningSearch(pos, algorithm, stopTimeNanos);
 
 		// If no depth was evaluated completely, time ran out.
@@ -64,10 +64,10 @@ public class Othello {
 		String posString = args[0];
 
 		if (posString.length() > 65) {
-			printErrorAndSetExit("String is to long! Should be 65 and got " + posString.length() + ".", 1);
+			printErrorAndSetExit("String is to long! Should be 65 and got " + posString.length(), 1);
 		}
 		if (posString.length() < 65) {
-			printErrorAndSetExit("String is to short! Should be 65 and got " + posString.length() + ".", 1);
+			printErrorAndSetExit("String is to short! Should be 65 and got " + posString.length(), 1);
 		}
 
 		return posString;
