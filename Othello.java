@@ -31,22 +31,22 @@ public class Othello {
 	public static void main(String [] args) {
 
 		// Get and validate input.
-		String posString = getAndValidatePosition(args);
+		String positionString = getAndValidatePosition(args);
 		double timeLimitSeconds = getAndValidateTime(args);
 
 		// Define and make position and algorithm.
-		OthelloPosition pos = new OthelloPosition(posString);
+		OthelloPosition position = new OthelloPosition(positionString);
 		OthelloAlgorithm algorithm = new AlphaBeta(new EarlyGame());
 
 		// The time when the time limit has ended.
 		long stopTimeNanos = stopTimeInNanos(timeLimitSeconds);
 
 		// Running the iterative deepening search until the time limit.
-		OthelloAction bestAction = iterativeDeepeningSearch(pos, algorithm, stopTimeNanos);
+		OthelloAction bestAction = iterativeDeepeningSearch(position, algorithm, stopTimeNanos);
 
 		// If no depth was evaluated completely, time ran out.
 		if (bestAction == null) {
-			bestAction = ifNoMoveWasGotten(pos);
+			bestAction = ifNoMoveWasGotten(position);
 		}
 
 		// Print the position.
@@ -91,8 +91,8 @@ public class Othello {
 		System.exit(exitCode);
 	}
 
-	private static OthelloAction ifNoMoveWasGotten(OthelloPosition pos) {
-		var moves = pos.getMoves();
+	private static OthelloAction ifNoMoveWasGotten(OthelloPosition position) {
+		var moves = position.getMoves();
 
 		if (moves.isEmpty()) {
 			return new OthelloAction("pass");
