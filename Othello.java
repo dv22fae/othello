@@ -27,6 +27,9 @@ import java.util.Timer;
 
 public class Othello {
 
+	private static final int LENGTH_OF_POSITION = 65;
+	private static final long ONE_SECOND_OF_NANOS = 1_000_000_000L;
+
 	/**
 	 * Main method
 	 *
@@ -39,40 +42,15 @@ public class Othello {
 	 */
 	public static void main(String [] args) {
 
-		String posString = args[0];
+		// Get and validate input.
+		String posString = getAndValidatePosition(args);
+		double timeLimitSeconds = getAndValidateTime(args);
+
 		OthelloPosition pos;
 		OthelloAlgorithm algorithm;
 		OthelloAction move = null;
-		Double timeLimitSeconds;
 
-        if (args.length < 2) {
-            System.err.println("Error! This is too few arguments.");
-            System.exit(1);
-        }
-
-		if (posString.length() > 65) {
-			System.err.println("Error! String is to long! Should be 65 and got " + posString.length() + ".");
-			System.exit(1);
-		}
-		if (posString.length() < 65) {
-			System.err.println("Error! String is to short! Should be 65 and got " + posString.length() + ".");
-			System.exit(1);
-		}
-
-		try {
-			timeLimitSeconds = Double.parseDouble(args[1]);
-		} catch (NumberFormatException e) {
-			System.err.println("Timelimit must be a number in seconds!");
-			System.exit(1);
-			return;
-		}
-
-		if (timeLimitSeconds <= 0) {
-			System.err.println("Time limit must be positive number!");
-			System.exit(1);
-		}
-
-		long timeLimitNanos = (long) (timeLimitSeconds * 1_000_000_000L);
+		long timeLimitNanos = (long) (timeLimitSeconds * ONE_SECOND_OF_NANOS);
 		long startTime = System.nanoTime();
 		long stopTIme = startTime + timeLimitNanos;
 
@@ -82,9 +60,8 @@ public class Othello {
 		OthelloAction bestAction = null;
 
 		pos = new OthelloPosition(posString);
-		//pos.illustrate(); //Only for debugging. The test script has it's own print method
 
-		// Which evaluator (heuristics) should be used
+		// Which evaluator, heuristics, should be used.
 		algorithm = new AlphaBeta(new EarlyGame());
 
 		while (true) {
@@ -109,23 +86,61 @@ public class Othello {
 			} catch (TimeIsUpExeption e) {
 				break;
 			}
-
-			//move = algorithm.evaluate(pos);
-			//searchDepth++;
 		}
 
-		// om inget djup hann evalueras.
+		// If no depth was evaluated completely, time ran out.
 		if (bestAction == null) {
-			var moves = pos.getMoves();
-			if (moves.isEmpty()) {
-				new OthelloAction("pass");
-			}
-			else {
-				moves.getFirst();
-			}
+			bestAction = ifNoMoveWasGotten(pos);
 		}
 
-		//move.print();
 		bestAction.print();
+	}
+
+	private static String getAndValidatePosition(String[] args) {
+		if (args.length < 2) {
+			System.err.println("Error! This is too few arguments.");
+			System.exit(1);
+		}
+
+		String posString = args[0];
+
+		if (posString.length() > 65) {
+			printErrorAndSetExit("String is to long! Should be 65 and got " + posString.length() + ".", 1);
+		}
+		if (posString.length() < 65) {
+			printErrorAndSetExit("String is to short! Should be 65 and got " + posString.length() + ".", 1);
+		}
+
+		return posString;
+	}
+
+	private static double getAndValidateTime(String[] args) {
+		double timeLimitSeconds;
+		try {
+			timeLimitSeconds = Double.parseDouble(args[1]);
+		} catch (NumberFormatException e) {
+			printErrorAndSetExit("Timelimit must be a number in seconds!", 1);
+			return 0;
+		}
+
+		if (timeLimitSeconds <= 0) {
+			printErrorAndSetExit("Time limit must be positive number!", 1);
+		}
+		return timeLimitSeconds;
+	}
+
+	private static void printErrorAndSetExit(String errorText, int exitCode) {
+		System.err.println(errorText);
+		System.exit(exitCode);
+	}
+
+	private static OthelloAction ifNoMoveWasGotten(OthelloPosition pos) {
+		var moves = pos.getMoves();
+
+		if (moves.isEmpty()) {
+			return new OthelloAction("pass");
+		} else {
+			return moves.getFirst();
+		}
 	}
 }
