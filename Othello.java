@@ -169,7 +169,7 @@ public class Othello {
 				break;
 			}
 		}
-
+		System.err.println(searchDepth);
 		return bestAction;
 	}
 }
