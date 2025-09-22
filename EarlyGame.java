@@ -133,10 +133,10 @@ public class EarlyGame implements OthelloEvaluator{
             case 2 ->{
                 // If you already own the corner then this square is good, otherwise it is bad.
                 if(pos.isOwnSquare(i, j - 1)){
-                    weightedMatrix[i][j] = 20;
+                    weightedMatrix[i][j] = 30;
                 }
                 else{
-                    weightedMatrix[i][j] = -20;
+                    weightedMatrix[i][j] = -30;
                 }
             }
 
@@ -199,17 +199,17 @@ public class EarlyGame implements OthelloEvaluator{
                 case 1, 8 ->{
                     // If the corner is already taken it is a good square, else it is a bad square.
                     if(pos.isOwnSquare(i - 1, j)){
-                        weightedMatrix[i][j] = 20;
+                        weightedMatrix[i][j] = 30;
                     }
                     else{
-                        weightedMatrix[i][j] = -20;
+                        weightedMatrix[i][j] = -30;
                     }
                 }
 
                 case 2 ->{
                     // If you have the corner and the pos to the left and the pos upwards then it's a decent square. Otherwise, a bad square.
                     if(pos.isOwnSquare(i, j - 1) && pos.isOwnSquare(i - 1, j) && pos.isOwnSquare(i - 1, j - 1)){
-                        weightedMatrix[i][j] = 5;
+                        weightedMatrix[i][j] = /*5*/30;
                     }
                     else{
                         weightedMatrix[i][j] = -40;
@@ -253,7 +253,7 @@ public class EarlyGame implements OthelloEvaluator{
                 case 2 ->{
                     // If you have the corner and the pos to the left and the pos downwards then it's a decent square. Otherwise, a bad square.
                     if(pos.isOwnSquare(i, j - 1) && pos.isOwnSquare(i + 1, j) && pos.isOwnSquare(i + 1, j - 1)){
-                        weightedMatrix[i][j] = 5;
+                        weightedMatrix[i][j] = /*5*/30;
                     }
                     else{
                         weightedMatrix[i][j] = -40;

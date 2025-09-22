@@ -161,6 +161,7 @@ public class AlphaBeta implements OthelloAlgorithm {
 
 		// If the time ran out before anything could be evaluated.
 		if (bestAction == null) {
+			System.err.println("BESTACTION IS NULL");
 			return possibleActions.getFirst();
 		}
 
