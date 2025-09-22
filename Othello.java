@@ -150,10 +150,9 @@ public class Othello {
 	private static OthelloAction iterativeDeepeningSearch(OthelloPosition position, OthelloAlgorithm algorithm,
 														  long stopTimeNanos) {
 		OthelloAction bestAction = null;
-		long startTime = System.nanoTime();
 		int searchDepth = 1;
 
-		while (startTime < stopTimeNanos) {
+		while (System.nanoTime() < stopTimeNanos) {
 			algorithm.setSearchDepth(searchDepth);
 			algorithm.setStopTime(stopTimeNanos);
 

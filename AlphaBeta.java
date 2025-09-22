@@ -43,7 +43,7 @@ public class AlphaBeta implements OthelloAlgorithm {
 	 *
 	 * @throws TimeIsUpExeption, if stop time is reached.
 	 */
-	private void stopTimeOfNot() {
+	private void stopTimeOrNot() {
 		if (System.nanoTime() >= stop) {
 			throw new TimeIsUpExeption();
 		}
@@ -109,7 +109,7 @@ public class AlphaBeta implements OthelloAlgorithm {
 	 * @return best action.
 	 */
 	public OthelloAction evaluate(OthelloPosition pos) {
-		stopTimeOfNot();
+		stopTimeOrNot();
 		OthelloAction bestAction = null;
 
 		// Keeps track on the best action from the root (current position).
@@ -127,7 +127,7 @@ public class AlphaBeta implements OthelloAlgorithm {
 			// White to move.
 			if (pos.toMove()) {
 				for (OthelloAction action : possibleActions) {
-					stopTimeOfNot();
+					stopTimeOrNot();
 					OthelloPosition newPos = pos.makeMove(action);
 
 					int score = minValue(newPos, NEG_INFINITY, POS_INFINITY, searchDepth - 1);
@@ -142,7 +142,7 @@ public class AlphaBeta implements OthelloAlgorithm {
 			// Black to move.
 			else {
 				for (OthelloAction action : possibleActions) {
-					stopTimeOfNot();
+					stopTimeOrNot();
 					OthelloPosition newPos = pos.makeMove(action);
 
 					int score = maxValue(newPos, NEG_INFINITY, POS_INFINITY, searchDepth - 1);
@@ -207,8 +207,7 @@ public class AlphaBeta implements OthelloAlgorithm {
 					break;
 				}
 			} catch (IllegalMoveException e) {
-				// hoppar över barn.
-				e.printStackTrace();
+				System.err.println("Skipping illegal move");
 			}
 		}
 		return maxVal;
@@ -253,8 +252,7 @@ public class AlphaBeta implements OthelloAlgorithm {
 					break;
 				}
 			} catch (IllegalMoveException e) {
-				// hoppar över barn.
-				e.printStackTrace();
+				System.err.println("Skipping illegal move");
 			}
 
 		}
