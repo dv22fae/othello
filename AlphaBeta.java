@@ -182,6 +182,7 @@ public class AlphaBeta implements OthelloAlgorithm {
 	 * @return score for white player.
 	 */
 	private int maxValue(OthelloPosition pos, int alpha, int beta, int depth) {
+		stopTimeOrNot();
 		LinkedList<OthelloAction> possibleActions = pos.getMoves();
 
 		// We stop at the bottom of the tree or if no possible move is available.
@@ -193,6 +194,7 @@ public class AlphaBeta implements OthelloAlgorithm {
 
 		// For each possible action.
 		for(OthelloAction action : possibleActions) {
+			stopTimeOrNot();
 			try {
 				OthelloPosition newPos = pos.makeMove(action);
 
@@ -227,6 +229,7 @@ public class AlphaBeta implements OthelloAlgorithm {
 	 * @return score for black player.
 	 */
 	private int minValue(OthelloPosition pos, int alpha, int beta, int depth) {
+		stopTimeOrNot();
 		LinkedList<OthelloAction> possibleActions = pos.getMoves();
 
 		// We stop and evaluate at the bottom of the tree or if no possible move is available.
@@ -238,6 +241,7 @@ public class AlphaBeta implements OthelloAlgorithm {
 
 		// For each possible action.
 		for(OthelloAction action : possibleActions) {
+			stopTimeOrNot();
 			try {
 				OthelloPosition newPos = pos.makeMove(action);
 
