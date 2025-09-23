@@ -166,10 +166,14 @@ public class Othello {
 					break;
 				}
 			} catch (TimeIsUpExeption e) {
+				System.err.println("Time limit is up at depth " + searchDepth);
 				break;
+			} catch (IllegalMoveException e) {
+				System.err.println("Skipping illegal move at depth " + searchDepth);
+				continue;
 			}
 		}
-		System.err.println(searchDepth);
+
 		return bestAction;
 	}
 }

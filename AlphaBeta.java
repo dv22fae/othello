@@ -108,7 +108,7 @@ public class AlphaBeta implements OthelloAlgorithm {
 	 * @param pos, current game position.
 	 * @return best action.
 	 */
-	public OthelloAction evaluate(OthelloPosition pos) {
+	public OthelloAction evaluate(OthelloPosition pos) throws IllegalMoveException {
 		stopTimeOrNot();
 		OthelloAction bestAction = null;
 
@@ -123,7 +123,6 @@ public class AlphaBeta implements OthelloAlgorithm {
 		// Initiate the best score at the beginning from which color is to play.
 		int bestScore = bestScoreAtstart(pos);
 
-		try {
 			// White to move.
 			if (pos.toMove()) {
 				for (OthelloAction action : possibleActions) {
@@ -153,11 +152,6 @@ public class AlphaBeta implements OthelloAlgorithm {
 					}
 				}
 			}
-		} catch (TimeIsUpExeption e) {
-			System.err.println("Time limit is up");
-		} catch (IllegalMoveException e) {
-			System.err.println("Skipping illegal move");
-		}
 
 		// If the time ran out before anything could be evaluated.
 		if (bestAction == null) {
@@ -181,7 +175,7 @@ public class AlphaBeta implements OthelloAlgorithm {
 	 * @param depth, depth to search.
 	 * @return score for white player.
 	 */
-	private int maxValue(OthelloPosition pos, int alpha, int beta, int depth) {
+	private int maxValue(OthelloPosition pos, int alpha, int beta, int depth) throws IllegalMoveException{
 		stopTimeOrNot();
 		LinkedList<OthelloAction> possibleActions = pos.getMoves();
 
@@ -195,21 +189,18 @@ public class AlphaBeta implements OthelloAlgorithm {
 		// For each possible action.
 		for(OthelloAction action : possibleActions) {
 			stopTimeOrNot();
-			try {
-				OthelloPosition newPos = pos.makeMove(action);
 
-				// Saves the biggest value from maxVal and the result from minVal().
-				maxVal = Math.max(maxVal, minValue(newPos, alpha, beta, depth - 1));
+			OthelloPosition newPos = pos.makeMove(action);
 
-				// Updates alfa.
-				alpha = Math.max(alpha, maxVal);
+			// Saves the biggest value from maxVal and the result from minVal().
+			maxVal = Math.max(maxVal, minValue(newPos, alpha, beta, depth - 1));
 
-				// If alfa is greater or equal to beta we can prune.
-				if (alpha >= beta) {
-					break;
-				}
-			} catch (IllegalMoveException e) {
-				System.err.println("Skipping illegal move");
+			// Updates alfa.
+			alpha = Math.max(alpha, maxVal);
+
+			// If alfa is greater or equal to beta we can prune.
+			if (alpha >= beta) {
+				break;
 			}
 		}
 		return maxVal;
@@ -228,7 +219,7 @@ public class AlphaBeta implements OthelloAlgorithm {
 	 * @param depth, depth to search.
 	 * @return score for black player.
 	 */
-	private int minValue(OthelloPosition pos, int alpha, int beta, int depth) {
+	private int minValue(OthelloPosition pos, int alpha, int beta, int depth) throws IllegalMoveException{
 		stopTimeOrNot();
 		LinkedList<OthelloAction> possibleActions = pos.getMoves();
 
@@ -242,23 +233,19 @@ public class AlphaBeta implements OthelloAlgorithm {
 		// For each possible action.
 		for(OthelloAction action : possibleActions) {
 			stopTimeOrNot();
-			try {
-				OthelloPosition newPos = pos.makeMove(action);
 
-				// Saves the smallest value from minVal and the result from maxVal().
-				minVal = Math.min(minVal, maxValue(newPos, alpha, beta, depth - 1));
+			OthelloPosition newPos = pos.makeMove(action);
 
-				// Updates beta.
-				beta = Math.min(beta, minVal);
+			// Saves the smallest value from minVal and the result from maxVal().
+			minVal = Math.min(minVal, maxValue(newPos, alpha, beta, depth - 1));
 
-				// If alfa is greater or equal to beta we can prune.
-				if(alpha >= beta) {
-					break;
-				}
-			} catch (IllegalMoveException e) {
-				System.err.println("Skipping illegal move");
+			// Updates beta.
+			beta = Math.min(beta, minVal);
+
+			// If alfa is greater or equal to beta we can prune.
+			if(alpha >= beta) {
+				break;
 			}
-
 		}
 		return minVal;
 	}

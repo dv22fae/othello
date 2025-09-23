@@ -31,7 +31,7 @@ public interface OthelloAlgorithm {
 	 * @param position, position to evaluate.
 	 * @return a OthelloAction.
 	 */
-	public OthelloAction evaluate(OthelloPosition position);
+	public OthelloAction evaluate(OthelloPosition position) throws IllegalMoveException;
 
 	/**
 	 * Sets the maximum search depth of the algorithm.
