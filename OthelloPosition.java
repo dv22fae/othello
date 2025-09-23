@@ -387,7 +387,6 @@ public class OthelloPosition {
         return maxPlayer;
     }
 
-
     /**
      * Returns the position resulting from making the move <code>action</code> in
      * the current position. Observe that this also changes the player to move next.
@@ -449,8 +448,6 @@ public class OthelloPosition {
         northWestTurnBricks(row, column, copiedPos, colour);
     }
 
-
-
     /**
      * @brief Flips the bricks in north direction from the current position.
      *
@@ -470,7 +467,6 @@ public class OthelloPosition {
         }
     }
 
-
     /**
      * @brief Flips the bricks in northEast direction from the current position.
      *
@@ -489,7 +485,6 @@ public class OthelloPosition {
             }
         }
     }
-
 
     /**
      * @brief Flips the bricks in east direction from the current position.
@@ -548,7 +543,6 @@ public class OthelloPosition {
         }
     }
 
-
     /**
      * @brief Flips the bricks in southWest direction from the current position.
      *
@@ -567,7 +561,6 @@ public class OthelloPosition {
             }
         }
     }
-
 
     /**
      * @brief Flips the bricks in west direction from the current position.
@@ -629,7 +622,6 @@ public class OthelloPosition {
             throw new IllegalMoveException(action);
         }
     }
-
 
     /**
      * Handles possition when it should be passed, switches the side to move.
@@ -725,5 +717,4 @@ public class OthelloPosition {
         }
         return s;
     }
-
 }

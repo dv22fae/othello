@@ -145,7 +145,7 @@ public class Othello {
 	 * @param position, position to evaluate.
 	 * @param algorithm, the algoritm for heuristics to use.
 	 * @param stopTimeNanos the time limit.
-	 * @return the best action from deepest search that was finnished.
+	 * @return the best action from the deepest search that was finished.
 	 */
 	private static OthelloAction iterativeDeepeningSearch(OthelloPosition position, OthelloAlgorithm algorithm,
 														  long stopTimeNanos) {
@@ -170,9 +170,9 @@ public class Othello {
 				break;
 			} catch (IllegalMoveException e) {
 				System.err.println("Skipping illegal move at depth " + searchDepth);
-				continue;
 			} catch (Exception e) {
 				System.err.println("Something unexpected happened in IDS." + e);
+				break;
 			}
 		}
 
