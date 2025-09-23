@@ -1,21 +1,3 @@
-/* Ideer, lägg weightedMatrix i Othelloposition och initialize den en gång i Othello.
-    Sedan använder man pos.weightedMatrix här så sliper man skapa den på nytt varje evaluering.
-
-    Man kan också bygga in antalet drag man har tillgång till vid varje position för att det är bra
-    så man har mycket valbarheter.
-
-    Också i position kan man ha koll på hur många brickor som är lagda för att avgöra om det är
-    early game, middlegame eller lategame.
-
-    Vid väldigt lategame så borde antalet brickor vara viktigare än vikterna i matrisen?
-
-    Kanske ta bort middle game och ha endast early game och lategame?
-     */
-// Ska den endast evaluera white 'W' till positiv, eller svart med eftersom man spelar som svart i script?
-
-
-
-
 /**
  * Early game heuristic evaluator for Othello.
  *
@@ -32,7 +14,6 @@
  */
 
 public class Heuristics implements OthelloEvaluator{
-
     /**
      * Matrix to handle weight of each position in the matrix.
      */
@@ -41,7 +22,7 @@ public class Heuristics implements OthelloEvaluator{
     /**
      * Evaluates the given position.
      *
-     * Builds the weighted matrix and returns a score.
+     * Builds the weight matrix and returns a score.
      *
      * @param pos, position to evaluate.
      * @return integer score, higher is better for White, lower is better for Black.
@@ -137,22 +118,32 @@ public class Heuristics implements OthelloEvaluator{
             }
 
             case 3 ->{
-                // If the opponent controls the corner this is a less good square.
-                if(pos.isOpponentSquare(1, j - 2)){
-                    weightedMatrix[i][j] = 5;
+                // If you already own the corner and the neighbour to the left, it is a good square.
+                if(pos.isOwnSquare(i, j - 2) && pos.isOwnSquare(i, j - 1)){
+                    weightedMatrix[i][j] = 20;
                 }
                 else{
                     weightedMatrix[i][j] = 20;
+                }
+
+                // If the square to the left is empty or the opponent square, this square is bad.
+                if(!pos.isOwnSquare(i, j - 1)){
+                    weightedMatrix[i][j] = -10;
                 }
             }
 
             case 6 ->{
-                // If the opponent controls the corner this is a less good square.
-                if(pos.isOpponentSquare(1, j + 2)){
-                    weightedMatrix[i][j] = 5;
+                // If you already own the corner and the neighbour to the right, it is a good square.
+                if(pos.isOwnSquare(i, j + 2) && pos.isOwnSquare(i, j + 1)){
+                    weightedMatrix[i][j] = 20;
                 }
                 else{
                     weightedMatrix[i][j] = 20;
+                }
+
+                // If the square to the right is empty or the opponent square, this square is bad.
+                if(!pos.isOwnSquare(i, j + 1)){
+                    weightedMatrix[i][j] = -10;
                 }
             }
 
@@ -272,7 +263,7 @@ public class Heuristics implements OthelloEvaluator{
                 case 1, 8 -> {
                     // Good square if opponent does not have the corner, because if opponent takes it, it will open up for you to take corner.
                     if (pos.isOpponentSquare(i - 2, j)) {
-                        weightedMatrix[i][j] = 5;
+                        weightedMatrix[i][j] = -5;
                     } else {
                         weightedMatrix[i][j] = 20;
                     }
@@ -311,7 +302,7 @@ public class Heuristics implements OthelloEvaluator{
                 case 1, 8 ->{
                     // Good square if opponent does not have the corner, because if opponent takes it, it will open up for you to take corner.
                     if(pos.isOpponentSquare(i + 2, j)) {
-                        weightedMatrix[i][j] = 5;
+                        weightedMatrix[i][j] = -5;
                     }
                     else{
                         weightedMatrix[i][j] = 20;

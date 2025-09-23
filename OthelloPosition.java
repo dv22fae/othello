@@ -372,7 +372,7 @@ public class OthelloPosition {
      * @param column, column.
      * @return true or false.
      */
-    private boolean isFree(int row, int column) {
+    public boolean isFree(int row, int column) {
         if (board[row][column] == 'E')
             return true;
         return false;
