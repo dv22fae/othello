@@ -171,6 +171,8 @@ public class Othello {
 			} catch (IllegalMoveException e) {
 				System.err.println("Skipping illegal move at depth " + searchDepth);
 				continue;
+			} catch (Exception e) {
+				System.err.println("Something unexpected happened in IDS." + e);
 			}
 		}
 
