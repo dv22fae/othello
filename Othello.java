@@ -36,7 +36,7 @@ public class Othello {
 
 		// Define and make position and algorithm.
 		OthelloPosition position = new OthelloPosition(positionString);
-		OthelloAlgorithm algorithm = new AlphaBeta(new EarlyGame());
+		OthelloAlgorithm algorithm = new AlphaBeta(new Heuristics());
 
 		// The time when the time limit has ended.
 		long stopTimeNanos = stopTimeInNanos(timeLimitSeconds);

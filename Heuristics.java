@@ -1,6 +1,3 @@
-import java.util.LinkedList;
-
-
 /* Ideer, lägg weightedMatrix i Othelloposition och initialize den en gång i Othello.
     Sedan använder man pos.weightedMatrix här så sliper man skapa den på nytt varje evaluering.
 
@@ -34,14 +31,7 @@ import java.util.LinkedList;
  * @version 1.0, 2025-09-24
  */
 
-public class EarlyGame implements OthelloEvaluator{
-    private static final int NUM_WHITE_SQUARES_WEIGHT = 10;
-    private static final int CONTROL_MIDDLE_WEIGHT = 25;
-    private static final int NUM_CORNER_NEIGHBOURS_WEIGHT = -20;
-    private static final int NUM_CORNERS_WEIGHT = 50;
-    private static final int NUM_GOOD_EDGE_SQUARES_WEIGHT = 30;
-
-    private int num_bricks = 0;
+public class Heuristics implements OthelloEvaluator{
 
     /**
      * Matrix to handle weight of each position in the matrix.
@@ -51,17 +41,13 @@ public class EarlyGame implements OthelloEvaluator{
     /**
      * Evaluates the given position.
      *
-     * Builds the weight matrix and returns a score.
+     * Builds the weighted matrix and returns a score.
      *
      * @param pos, position to evaluate.
      * @return integer score, higher is better for White, lower is better for Black.
      */
     @Override
     public int evaluate(OthelloPosition pos) {
-        //int numPossibleMoves = 0;
-        //LinkedList<OthelloAction> actions = pos.getMoves();
-        //numPossibleMoves = actions.size();
-
         initializeWeightedMatrix(pos);
 
         int totalWeightWhite = 0;
@@ -133,50 +119,40 @@ public class EarlyGame implements OthelloEvaluator{
             case 2 ->{
                 // If you already own the corner then this square is good, otherwise it is bad.
                 if(pos.isOwnSquare(i, j - 1)){
-                    weightedMatrix[i][j] = 30;
+                    weightedMatrix[i][j] = 20;
                 }
                 else{
-                    weightedMatrix[i][j] = -30;
+                    weightedMatrix[i][j] = -20;
                 }
             }
 
             case 7 ->{
                 // If you already own the corner then this square is good, otherwise it is bad.
                 if(pos.isOwnSquare(i, j + 1)){
-                    weightedMatrix[i][j] = /*20*/30;
+                    weightedMatrix[i][j] = 20;
                 }
                 else{
-                    weightedMatrix[i][j] = /*-20*/-30;
+                    weightedMatrix[i][j] = -20;
                 }
             }
 
             case 3 ->{
-                // If you already own the corner and the neighbour to the left, it is a good square.
-                if(pos.isOwnSquare(i, j - 2) && pos.isOwnSquare(i, j - 1)){
-                    weightedMatrix[i][j] = 20;
+                // If the opponent controls the corner this is a less good square.
+                if(pos.isOpponentSquare(1, j - 2)){
+                    weightedMatrix[i][j] = 5;
                 }
                 else{
                     weightedMatrix[i][j] = 20;
-                }
-
-                // If the square to the left is empty or the opponent square, this square is bad.
-                if(!pos.isOwnSquare(i, j - 1)){
-                    weightedMatrix[i][j] = -10;
                 }
             }
 
             case 6 ->{
-                // If you already own the corner and the neighbour to the right, it is a good square.
-                if(pos.isOwnSquare(i, j + 2) && pos.isOwnSquare(i, j + 1)){
-                    weightedMatrix[i][j] = 20;
+                // If the opponent controls the corner this is a less good square.
+                if(pos.isOpponentSquare(1, j + 2)){
+                    weightedMatrix[i][j] = 5;
                 }
                 else{
                     weightedMatrix[i][j] = 20;
-                }
-
-                // If the square to the right is empty or the opponent square, this square is bad.
-                if(!pos.isOwnSquare(i, j + 1)){
-                    weightedMatrix[i][j] = -10;
                 }
             }
 
@@ -199,17 +175,17 @@ public class EarlyGame implements OthelloEvaluator{
                 case 1, 8 ->{
                     // If the corner is already taken it is a good square, else it is a bad square.
                     if(pos.isOwnSquare(i - 1, j)){
-                        weightedMatrix[i][j] = 30;
+                        weightedMatrix[i][j] = 20;
                     }
                     else{
-                        weightedMatrix[i][j] = -30;
+                        weightedMatrix[i][j] = -20;
                     }
                 }
 
                 case 2 ->{
                     // If you have the corner and the pos to the left and the pos upwards then it's a decent square. Otherwise, a bad square.
                     if(pos.isOwnSquare(i, j - 1) && pos.isOwnSquare(i - 1, j) && pos.isOwnSquare(i - 1, j - 1)){
-                        weightedMatrix[i][j] = /*5*/30;
+                        weightedMatrix[i][j] = 5;
                     }
                     else{
                         weightedMatrix[i][j] = -40;
@@ -219,7 +195,7 @@ public class EarlyGame implements OthelloEvaluator{
                 case 7 ->{
                     // If you have the corner and the pos to the right and the pos upwards then it's a decent square. Otherwise, a bad square.
                     if(pos.isOwnSquare(i, j + 1) && pos.isOwnSquare(i - 1, j) && pos.isOwnSquare(i - 1, j + 1)){
-                        weightedMatrix[i][j] = /*5*/30;
+                        weightedMatrix[i][j] = 5;
                     }
                     else{
                         weightedMatrix[i][j] = -40;
@@ -243,17 +219,17 @@ public class EarlyGame implements OthelloEvaluator{
                 case 1, 8 ->{
                     // If the corner is already taken it is a good square.
                     if(pos.isOwnSquare(i + 1, j)){
-                        weightedMatrix[i][j] = /*20*/30;
+                        weightedMatrix[i][j] = 20;
                     }
                     else{
-                        weightedMatrix[i][j] = /*-20*/-30;
+                        weightedMatrix[i][j] = -20;
                     }
                 }
 
                 case 2 ->{
                     // If you have the corner and the pos to the left and the pos downwards then it's a decent square. Otherwise, a bad square.
                     if(pos.isOwnSquare(i, j - 1) && pos.isOwnSquare(i + 1, j) && pos.isOwnSquare(i + 1, j - 1)){
-                        weightedMatrix[i][j] = /*5*/30;
+                        weightedMatrix[i][j] = 5;
                     }
                     else{
                         weightedMatrix[i][j] = -40;
@@ -263,7 +239,7 @@ public class EarlyGame implements OthelloEvaluator{
                 case 7 ->{
                     // If you have the corner and the pos to the right and the pos downwards then it's a decent square. Otherwise, a bad square.
                     if(pos.isOwnSquare(i, j + 1) && pos.isOwnSquare(i + 1, j) && pos.isOwnSquare(i + 1, j + 1)){
-                        weightedMatrix[i][j] = /*5*/30;
+                        weightedMatrix[i][j] = 5;
                     }
                     else{
                         weightedMatrix[i][j] = -40;
@@ -296,7 +272,7 @@ public class EarlyGame implements OthelloEvaluator{
                 case 1, 8 -> {
                     // Good square if opponent does not have the corner, because if opponent takes it, it will open up for you to take corner.
                     if (pos.isOpponentSquare(i - 2, j)) {
-                        weightedMatrix[i][j] = -5;
+                        weightedMatrix[i][j] = 5;
                     } else {
                         weightedMatrix[i][j] = 20;
                     }
@@ -335,7 +311,7 @@ public class EarlyGame implements OthelloEvaluator{
                 case 1, 8 ->{
                     // Good square if opponent does not have the corner, because if opponent takes it, it will open up for you to take corner.
                     if(pos.isOpponentSquare(i + 2, j)) {
-                        weightedMatrix[i][j] = -5;
+                        weightedMatrix[i][j] = 5;
                     }
                     else{
                         weightedMatrix[i][j] = 20;

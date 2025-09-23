@@ -409,33 +409,21 @@ public class OthelloPosition {
         int row = action.getRow();
         int column = action.getColumn();
 
-        checkSoInsideBoard(row, column, action);
-        // Checks if there is any bricks that can be flipped with this move.
-        if(!isMove(row, column)){
-            throw new IllegalMoveException(action);
-        }
-
         // Makes a copy of the current position on the board, we will not modify the original position.
         OthelloPosition currentPosCloned = this.clone();
 
         boolean whitesMove = this.maxPlayer;
 
-        // Lay the played stone on the copied board.
+        // Lay the played stone on the copied board and flips the bricks according to the placed brick.
         if (whitesMove) {
             currentPosCloned.board[row][column] = 'W';
+            turnOverBricksAllDirections(row, column, currentPosCloned, 'W');
+
         } else {
             currentPosCloned.board[row][column] = 'B';
-        }
-
-        // Flips the black bricks to white according to the placed white brick.
-        if (whitesMove) {
-            turnOverBricksAllDirections(row, column, currentPosCloned, 'W');
-        }
-
-        // Flips the white bricks to black according to the placed black brick.
-        else{
             turnOverBricksAllDirections(row, column, currentPosCloned, 'B');
         }
+
         // Switch side to move
         currentPosCloned.maxPlayer = !this.maxPlayer;
 
@@ -619,7 +607,6 @@ public class OthelloPosition {
         }
     }
 
-
     /**
      * Validates that row and column is inside the board and empty.
      *
@@ -642,6 +629,7 @@ public class OthelloPosition {
             throw new IllegalMoveException(action);
         }
     }
+
 
     /**
      * Handles possition when it should be passed, switches the side to move.
