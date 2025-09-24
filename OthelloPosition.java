@@ -430,7 +430,7 @@ public class OthelloPosition {
     }
 
     /**
-     * Flips taken squers in all eight directions from (row, column).
+     * Flips taken squares in all eight directions from (row, column).
      *
      * @param row, row.
      * @param column, column.
@@ -601,30 +601,7 @@ public class OthelloPosition {
     }
 
     /**
-     * Validates that row and column is inside the board and empty.
-     *
-     * @param row, row.
-     * @param column, column.
-     * @param action, action being validated.
-     * @throws IllegalMoveException
-     */
-    private void checkSoInsideBoard(int row, int column, OthelloAction action) throws IllegalMoveException {
-        if (row < 1 || row > BOARD_SIZE)
-        {
-            throw new IllegalMoveException(action);
-        }
-
-        if (column < 1 || column > BOARD_SIZE){
-            throw new IllegalMoveException(action);
-        }
-
-        if (!isFree(row, column)) {
-            throw new IllegalMoveException(action);
-        }
-    }
-
-    /**
-     * Handles possition when it should be passed, switches the side to move.
+     * Handles position when it should be passed, switches the side to move.
      *
      * @return new position with the turn handed over.
      */

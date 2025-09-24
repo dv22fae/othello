@@ -91,7 +91,7 @@ public class Othello {
 		try {
 			timeLimitSeconds = Double.parseDouble(args[1]);
 		} catch (NumberFormatException e) {
-			printErrorAndSetExit("Timelimit must be a number in seconds!", 1);
+			printErrorAndSetExit("Time limit must be a number in seconds!", 1);
 			return 0;
 		}
 
@@ -166,8 +166,6 @@ public class Othello {
 					break;
 				}
 			} catch (TimeIsUpExeption e) {
-				// Nice to have a print of this but get wrong in test so is commented out now.
-				// System.err.println("Time limit is up at depth " + searchDepth);
 				break;
 			} catch (IllegalMoveException e) {
 				System.err.println("Skipping illegal move at depth " + searchDepth);

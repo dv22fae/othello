@@ -162,6 +162,7 @@ public class Heuristics implements OthelloEvaluator{
             case 4:
             case 5: {
                 weightedMatrix[i][j] = 5;
+                break;
             }
 
             default:
@@ -403,6 +404,7 @@ public class Heuristics implements OthelloEvaluator{
             case 1:
             case 8: {
                 weightedMatrix[i][j] = 5;
+                break;
             }
 
             case 2: {

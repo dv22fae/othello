@@ -4,7 +4,7 @@
  * heuristic evaluation of the position (positive numbers if the position is
  * better for the first player, white). Notice that an evaluator is not supposed
  * to make moves in the position to 'see into the future', but only evaluate the
- * static features of the postion.
+ * static features of the position.
  *
  * @author Henrik Björklund, original
  * @author Fredrik Alexandre, co-author
@@ -16,7 +16,7 @@
 public interface OthelloEvaluator {
 
 	/**
-	 * Returns an integer, representing a heuristic evaluation of the postion.
+	 * Returns an integer, representing a heuristic evaluation of the position.
 	 *
 	 * @param position, position to evaluate.
 	 * @return score where higher is better for White and lower is better for Black.
