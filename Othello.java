@@ -70,10 +70,10 @@ public class Othello {
 
 		String posString = args[0];
 
-		if (posString.length() > 65) {
+		if (posString.length() > LENGTH_OF_POSITION) {
 			printErrorAndSetExit("String is to long! Should be 65 and got " + posString.length(), 1);
 		}
-		if (posString.length() < 65) {
+		if (posString.length() < LENGTH_OF_POSITION) {
 			printErrorAndSetExit("String is to short! Should be 65 and got " + posString.length(), 1);
 		}
 
@@ -166,7 +166,8 @@ public class Othello {
 					break;
 				}
 			} catch (TimeIsUpExeption e) {
-				System.err.println("Time limit is up at depth " + searchDepth);
+				// Nice to have a print of this but get wrong in test so is commented out now.
+				// System.err.println("Time limit is up at depth " + searchDepth);
 				break;
 			} catch (IllegalMoveException e) {
 				System.err.println("Skipping illegal move at depth " + searchDepth);
